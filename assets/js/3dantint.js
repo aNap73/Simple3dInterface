@@ -20,7 +20,7 @@ var int3d = {
     requestAnimationFrame(int3d.Animate);  
   },
   GenerateCube(name,x,y,z){
-    let geometry = new THREE.BoxGeometry( 3, 3, 3 );
+    let geometry = new THREE.BoxGeometry( 7, 3.5, 1  );
     //console.log(rgb(25, 25, 230));
     let material = THREE.MeshFaceMaterial([
       new THREE.MeshBasicMaterial({
@@ -57,7 +57,7 @@ var int3d = {
     //Generate 3 rows of 10 cubes
     let cubx = 0;
     let cuby = 0;
-    let cubz = -15;
+    let cubz = -12;
     let angle = 0
     for(let i=0; i < 10; i ++){
        
