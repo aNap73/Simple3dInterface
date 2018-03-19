@@ -1,67 +1,107 @@
 THREE.ImageUtils.crossOrigin = '';
 var int3d = {  
+  rotspeed: 0,
   maxcharacterswide: 55,
   scene: new THREE.Scene(),
   camera: new THREE.PerspectiveCamera(),
   renderer: new THREE.WebGLRenderer(),
   myheight: 0,
-	mywidth: 0, 
+  mywidth: 0, 
+  mylastevent:'',
   ant3dMouse: new THREE.Vector2(),
   StartUp: function(inJQueryDomElement){
-    //Code that sets up your initial sceen here
-    
+    //Code that sets up your initial sceen here    
     int3d.myheight = window.innerHeight*1;
     int3d.mywidth = window.innerWidth*1;
     THREE.ImageUtils.crossOrigin = '';
-    inJQueryDomElement.append(int3d.renderer.domElement);
-    
+    inJQueryDomElement.append(int3d.renderer.domElement);    
   
     int3d.camera = new THREE.PerspectiveCamera( 75, (int3d.mywidth/int3d.myheight), 0.1, 1000 );
     int3d.camera.position.z =0;
     int3d.renderer.setSize( int3d.mywidth, int3d.myheight );
     int3d.GenerateObjects();   
+    inJQueryDomElement.on('touchstart',  function (e) {
+      e.preventDefault();
+      int3d.mylastevent = e;
+      
+    });
+    inJQueryDomElement.on('touchend', function (e) {      
+      e.preventDefault();
+      let DeltaX = int3d.mylastevent.originalEvent.touches[0].pageX - e.originalEvent.changedTouches[0].pageX;
+      console.log(DeltaX);
+      //window.alert(DeltaX);
+      int3d.ant3dMouse.x = e.originalEvent.changedTouches[0].pageX;
+      int3d.ant3dMouse.y = e.originalEvent.changedTouches[0].pageY;
+      int3d.mylastevent = e;
+      int3d.rotspeed = DeltaX * .0001;
+    });
+
+    inJQueryDomElement.on('mousedown',function (e) {
+      //console.log(e.originalEvent.touches[0].pageX);
+      e.preventDefault();
+     int3d.mylastevent = e;
+      
+    });
+    inJQueryDomElement.on('mouseup', function (e) {
+      
+      e.preventDefault();
+
+      ;
+      let DeltaX = int3d.mylastevent.clientX - e.clientX;
+      int3d.rotspeed = DeltaX * .0001;
+    
+      int3d.mylastevent = e;
+    
+      /*e.preventDefault();
+      
+      console.log(DeltaX);
+      //window.alert(DeltaX);
+      int3d.ant3dMouse.x = e.originalEvent.changedTouches[0].pageX;
+      int3d.ant3dMouse.y = e.originalEvent.changedTouches[0].pageY;
+      int3d.mylastevent = e;
+      int3d.rotspeed = DeltaX * .0001;*/
+    });
     requestAnimationFrame(int3d.Animate);
       
   },
   GetTextArray:function(inText, inLineLen){
+    //This function wraps text el-manuel aan.
     let col = [];
     let wrkwords = inText.split(' ');
     let wrkline = '';
+    //Split words by space into array
     $.each(wrkwords,function(i,item){
       let curline = wrkline + ' ' + item;
+      //If current line + new word and space is too big. break
       if (curline.length > inLineLen){
+        //break line; push to output col
         col.push(wrkline);
         wrkline = item;
       } else {
+        //add to line
         wrkline += ' ' + item;
       }
     });
+    //Final push
     col.push(wrkline);
-    //let col[0] = inText.slice(0,50);
     return col;
   },
   GenerateCube: function(name,x,y,z){
-    let geometry = new THREE.BoxGeometry( 7, 3.5, 1  );
-    //let texometry = int3d.GenerateTextTexture('Dummy','dummy');
-    
-    
-    //let texloader = new THREE.TextureLoader();
-    //texloader.load('https://anap73.github.io/Responsive-Portfolio.github.io/assets/images/AntMeHead.png',
-    //function(texture){
-
-   // });
+    //this code generates a cube, either text or image... atm
+    let geometry = new THREE.BoxGeometry( 7, 3.5, 1  );  
+    //Get Image map
     let anthead = THREE.ImageUtils.loadTexture('https://anap73.github.io/Responsive-Portfolio.github.io/assets/images/AntMeHead.png');
-    let can = document.createElement("canvas");
-    //can.attributes('background') = blue;
+    
+    //Get Text map
+    let can = document.createElement("canvas");    
     let xc = can.getContext("2d");
 
+    let inTitle =  "This is a Title...";
+    let inArticle = "This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article.";
 
     xc.textBaseline = 'top';
-
-    /// color for background
-    
-    xc.fillStyle = "blue";
-    
+    /// color for background    
+    xc.fillStyle = "blue";    
     xc.width = xc.height = 128;
     xc.font = "10pt arial bold";
     xc.shadowColor = "#000";    
@@ -69,14 +109,14 @@ var int3d = {
     xc.shadowBlur = 7;
     xc.fillStyle = "white";    
     xc.font = "20pt arial bold";
-    xc.fillText('This is a Title...', 80, 0);
+    xc.fillText(inTitle, 80, 5);
     xc.font = "10pt arial bold";
-    $.each(int3d.GetTextArray('This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article.',int3d.maxcharacterswide),
+    $.each(int3d.GetTextArray(inArticle,int3d.maxcharacterswide),
     function (i, item){
-      xc.fillText(item, 20, 35+(11*i));
+      xc.fillText(item, 20, 40+(11*i));
     });
     
-   
+    //add map here
     let xm = '';
     if(Math.random()>.5){
       xm = new THREE.MeshBasicMaterial({
@@ -89,9 +129,7 @@ var int3d = {
          });    
       xm.map.needsUpdate = true;
     }
- 
     
- 
       let material = new THREE.MeshFaceMaterial([
       new THREE.MeshBasicMaterial({
           
@@ -113,13 +151,13 @@ var int3d = {
         color: 0x95970a //bottom
         //map: anthead
       }),
-      xm //Front
-      ,
+      xm, //Front built external
       new THREE.MeshBasicMaterial({
         color: 0x1919e6   //three rot right
         //map: anthead
       })        
                                               ]);
+      //Build cube mesh with geometry and material                                          
       let cube = new THREE.Mesh( geometry, material );
       cube.antName = name;
       cube.position.x=x;
@@ -136,6 +174,7 @@ var int3d = {
     for(let i=0; i < 10; i ++){
        
       cuby=-4;
+      
       let xz = int3d.rotate(0,0,cubx,cubz,((360/10)*i));
       let cubeA = int3d.GenerateCube('cubeA' + i,xz[0],cuby,xz[1],0);
       cuby=0;
@@ -152,12 +191,13 @@ var int3d = {
   Animate: function () {
     //Code that runs every frame goes here
     
-    int3d.scene.rotation.y += .001;
+    int3d.scene.rotation.y += int3d.rotspeed;
     $.each(int3d.scene.children,function(i,item){
-       item.rotation.y -= .001; 
+       item.rotation.y += -int3d.rotspeed; 
     }); 
     int3d.renderer.render(int3d.scene, int3d.camera);
     requestAnimationFrame(int3d.Animate);
+    int3d.rotspeed = int3d.rotspeed * .98;
   },
   rotate: function(cx, cy, x, y, angle) {
     var radians = (Math.PI / 180) * angle,
