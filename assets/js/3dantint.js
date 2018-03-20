@@ -24,21 +24,21 @@ var int3d = {
     int3d.renderer.setSize( int3d.mywidth, int3d.myheight );
     int3d.GenerateObjects();   
     inJQueryDomElement.on('touchstart',  function (e) {
-      e.preventDefault();
+      //e.preventDefault();
       int3d.mylastevent = e;
-
       var video = document.getElementById( 'video' );
       video.loop=true;
       video.play();
+      
       //int3d.Videos[0].play();
       //$('#video').play();
     });
     inJQueryDomElement.on('touchend', function (e) {      
-      e.preventDefault();
+      //e.preventDefault();
       let DeltaX = int3d.mylastevent.originalEvent.touches[0].pageX - e.originalEvent.changedTouches[0].pageX;
       console.log(DeltaX);
 
-      //window.alert(DeltaX);
+    
       int3d.ant3dMouse.x = e.originalEvent.changedTouches[0].pageX;
       int3d.ant3dMouse.y = e.originalEvent.changedTouches[0].pageY;
       int3d.mylastevent = e;
@@ -46,13 +46,13 @@ var int3d = {
     });
 
     inJQueryDomElement.on('mousedown',function (e) {
-      //console.log(e.originalEvent.touches[0].pageX);
+    
       e.preventDefault();
-
       var video = document.getElementById( 'video' );
       video.loop=true;
       video.play();
-      //int3d.Videos[0].play();
+
+    
      int3d.mylastevent = e;
       
     });
