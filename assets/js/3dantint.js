@@ -14,21 +14,27 @@ var int3d = {
   bBack: false,
   NewTex: '',
   bProcessingGifs: false,
+  colMovs: [],
   GetGiffys: function (inSrch, callback){
     let gkey = "aGpceXfwMY5TKtoH39N128oj2HirwBKv";
     let offset = Math.floor(Math.random()*125);
-        
+    int3d.colMovs.length=0;    
     $.ajax({
-               url: "https://api.giphy.com/v1/gifs/search?api_key=" + gkey + "&q='" + inSrch + "'&offset=" + offset + "&limit=1",
-               method: "GET",
-               async: false,
+               url: "https://api.giphy.com/v1/gifs/search?api_key=" + gkey + "&q='" + inSrch + "'&offset=" + offset + "&limit=10",
+               method: "GET"
              }).then(function(response) {
                int3d.colGiffys = [];
   
                for(i=0;i<response.data.length;i++){
                  let rd = response.data[i];
-                 let gif = rd.images.looping.mp4;               
+                 let gif = rd.images.looping.mp4;
+                 let vid = $('<video width="640" height="360" controls>')
+                 let srce = $('<source src="' + gif +'"  type="video/mp4">')
+                 vid.append(srce);
+                 //int3d.colMovs.push(vid);               
                  int3d.colGiffys.push(gif);
+                 //vid.load();
+                 
                }
                callback(); 
     
@@ -224,35 +230,26 @@ var int3d = {
     let cuby = 0;
     let cubz = -12;
     let angle = 0
-    
-        for(let i=0; i < 10; i ++){
-    
-          
-          
-          //int3d.NewTex = THREE.ImageUtils.loadTexture('https://anap73.github.io/Responsive-Portfolio.github.io/assets/images/AntMeHead.png');
-          //$('#myvideo').empty();
-          //let mysrc = $('<source src = "'+int3d.colGiffys[0]+'" type="video/mp4">')
-          //$('#myvideo').append(mysrc);
-          THREE.ImageUtils.crossOrigin = '';
+    THREE.ImageUtils.crossOrigin = '';
           let video = document.getElementById('myvideo');
-          let vidsrc = document.getElementById('myvidsrc');                     
-          $('#myvidsrc').attr('src',int3d.colGiffys[1]);
-          vidsrc.src=int3d.colGiffys[0];
-          video.loop=true;
+          video.setAttribute('crossorigin', 'anonymous');
+          video.src = int3d.colGiffys[Math.floor(Math.random()) * 10 ];
+       
           video.load();
-          
-         
           video.addEventListener('loadeddata', function() {
-            // Video is loaded and can be played
-            let ivideo = document.getElementById('myvideo');
-            ivideo.play();
-            var texture = new THREE.VideoTexture( ivideo );
+            video.loop=true;
+            video.play();
+            var texture = new THREE.VideoTexture( video );
             texture.minFilter = THREE.LinearFilter;
             texture.magFilter = THREE.LinearFilter;
             texture.format = THREE.RGBFormat;
             texture.needsUpdate=true;
-        
+      
             int3d.NewTex = texture;
+            for(let i=0; i < 10; i ++){          
+           // Video is loaded and can be played
+            
+
             cuby=-4;
           
             let xz = int3d.rotate(0,0,cubx,cubz,((360/10)*i));
@@ -265,10 +262,12 @@ var int3d = {
             let cubeC = int3d.GenerateCube('cubeC' + i,xz[0],cuby,xz[1],0);
             
             int3d.scene.add(cubeA, cubeB, cubeC);
-         }, false);  
+          
          
+        
         }
-
+        }, false);
+          
       return;
     /*let loader = new THREE.TextureLoader();
     loader.crossOrigin = 'anonymous';
