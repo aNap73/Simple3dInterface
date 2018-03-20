@@ -68,7 +68,7 @@ var int3d = {
 
     });
   },
-  StartUp: function (inJQueryDomElement) {
+  StartUp: function (inJQueryDomElement, inSrch) {
     //Code that sets up your initial sceen here
 
 
@@ -80,7 +80,7 @@ var int3d = {
     int3d.camera = new THREE.PerspectiveCamera(75, (int3d.mywidth / int3d.myheight), 0.1, 1000);
     int3d.camera.position.z = 0;
     int3d.renderer.setSize(int3d.mywidth, int3d.myheight);
-    int3d.GetGiffys('Star Wars', int3d.getWikiData);
+    int3d.GetGiffys(inSrch, int3d.getWikiData);
    
     $(document).on('click', function (e) {
       let vid = document.getElementById('myvideo');
@@ -205,19 +205,19 @@ var int3d = {
     let myrnd = Math.random();
     switch(true)
     {
-      case myrnd < .25:
+      case myrnd < .125:
       xm = new THREE.MeshBasicMaterial({
         map: int3d.NewTex
       });
       xm.map.needsUpdate = true;
       break;
-      case myrnd < .50:
+      case myrnd < .20:
       xm = new THREE.MeshBasicMaterial({
         map: int3d.NewTex2
       });
       xm.map.needsUpdate = true;
       break;
-      case myrnd < .75:
+      case myrnd < .50:
       xm = new THREE.MeshBasicMaterial({
         map: int3d.NewTex3
       });
@@ -369,5 +369,5 @@ var int3d = {
   }
 }
 $(document).ready(function () {
-  int3d.StartUp($("#rightherebaby"));
+  int3d.StartUp($("#rightherebaby"),'Star Wars');
 });
