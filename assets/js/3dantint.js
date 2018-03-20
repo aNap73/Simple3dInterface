@@ -15,6 +15,31 @@ var int3d = {
   NewTex: '',
   bProcessingGifs: false,
   colMovs: [],
+  colHeadings: [],
+  colArticles: [],
+  colLinks: [],
+  getWikiData: function(SearchTerm, callback){
+    $.ajax({
+    type: "GET",
+    url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search="' + SearchTerm + '"&format=json&callback=?',	
+    dataType: 'json',  
+    }).then(function(jsondata, status, jqXHR){
+      int3d.colHeadings.length=1;
+      int3d.colArticles.length=1;
+      int3d.colLinks.length=1;
+  
+      
+      $.each(jsondata[1], function(index,value){
+        int3d.colHeadings.push(value);
+        int3d.colArticles.push(jsondata[2][index]);
+        int3d.colLinks.push(jsondata[3][index]);
+           
+      })    
+     
+      callback();       
+    });
+    
+    },
   GetGiffys: function (inSrch, callback) {
     let gkey = "aGpceXfwMY5TKtoH39N128oj2HirwBKv";
     let offset = Math.floor(Math.random() * 125);
@@ -39,7 +64,7 @@ var int3d = {
       //getElementById('myvidsrc1').src=int3d.colGiffys[0];
       //getElementById('myvidsrc2').src=int3d.colGiffys[1];
       //getElementById('myvidsrc3').src=int3d.colGiffys[2];
-      callback();
+      callback(inSrch, int3d.GenerateObjects);
 
     });
   },
@@ -55,8 +80,9 @@ var int3d = {
     int3d.camera = new THREE.PerspectiveCamera(75, (int3d.mywidth / int3d.myheight), 0.1, 1000);
     int3d.camera.position.z = 0;
     int3d.renderer.setSize(int3d.mywidth, int3d.myheight);
-    int3d.GetGiffys('Superman', int3d.GenerateObjects);
-
+    int3d.GetGiffys('Superman', int3d.getWikiData);
+    //int3d.GetGiffys('Superman', int3d.getWikiData('Superman',int3d.GenerateObjects()));
+    //int3d.getWikiData('Superman',int3d.GenerateObjects());
     $(document).on('click', function (e) {
       //let video = document.getElementById('myvideo');
       //video.loop=true;
@@ -140,7 +166,7 @@ var int3d = {
     col.push(wrkline);
     return col;
   },
-  GenerateCube: function (name, x, y, z) {
+  GenerateCube: function (name, x, y, z, inTitle, inArticle, inLink) {
 
     //this code generates a cube, either text or image... atm
     let geometry = new THREE.BoxGeometry(7, 3.5, 1);
@@ -148,8 +174,9 @@ var int3d = {
     let can = document.createElement("canvas");
     let xc = can.getContext("2d");
 
-    let inTitle = "Superman";
-    let inArticle = "I think were gonna punt on the iframe issue. Lots more to do and only superman could get that to work.";
+
+
+   
 
     xc.textBaseline = 'top';
     /// color for background    
@@ -238,22 +265,23 @@ var int3d = {
       texture.magFilter = THREE.LinearFilter;
       texture.format = THREE.RGBFormat;
       texture.needsUpdate = true;
-
       int3d.NewTex = texture;
       for (let i = 0; i < 10; i++) {
         // Video is loaded and can be played
-
+        let myTitle = int3d.colHeadings[(i+1)];
+        let myArticle = int3d.colArticles[(i+1)];
+        let myLink = int3d.colLinks[(i+1)]; 
 
         cuby = -4;
 
         let xz = int3d.rotate(0, 0, cubx, cubz, ((360 / 10) * i));
-        let cubeA = int3d.GenerateCube('cubeA' + i, xz[0], cuby, xz[1], 0);
+        let cubeA = int3d.GenerateCube('cubeA' + i, xz[0], cuby, xz[1], myTitle, myArticle, myLink );
         cuby = 0;
         xy = int3d.rotate(0, 0, cuby, cubx, ((360 / 10) * i));
-        let cubeB = int3d.GenerateCube('cubeB' + i, xz[0], cuby, xz[1], 0);
+        let cubeB = int3d.GenerateCube('cubeB' + i, xz[0], cuby, xz[1],  myTitle, myArticle, myLink );
         cuby = 4;
         xy = int3d.rotate(0, 0, cuby, cubx, ((360 / 10) * i));
-        let cubeC = int3d.GenerateCube('cubeC' + i, xz[0], cuby, xz[1], 0);
+        let cubeC = int3d.GenerateCube('cubeC' + i, xz[0], cuby, xz[1], myTitle, myArticle, myLink );
 
         int3d.scene.add(cubeA, cubeB, cubeC);
 
