@@ -2,7 +2,7 @@
 var int3d = {
   colGiffys: [],
   rotspeed: 0,
-  maxcharacterswide: 40,
+  maxcharacterswide: 50,
   scene: new THREE.Scene(),
   camera: new THREE.PerspectiveCamera(),
   renderer: new THREE.WebGLRenderer(),
@@ -13,6 +13,8 @@ var int3d = {
   ant3dMouse: new THREE.Vector2(),
   bBack: false,
   NewTex: '',
+  NewTex2: '',
+  NewTex3: '',
   bProcessingGifs: false,
   colMovs: [],
   colHeadings: [],
@@ -45,7 +47,7 @@ var int3d = {
     let offset = Math.floor(Math.random() * 125);
     int3d.colMovs.length = 0;
     $.ajax({
-      url: "https://api.giphy.com/v1/gifs/search?api_key=" + gkey + "&q='" + inSrch + "'&offset=" + offset + "&limit=1",
+      url: "https://api.giphy.com/v1/gifs/search?api_key=" + gkey + "&q='" + inSrch + "'&offset=" + offset + "&limit=3",
       method: "GET"
     }).then(function (response) {
       int3d.colGiffys = [];
@@ -61,9 +63,7 @@ var int3d = {
         //vid.load();
 
       }
-      //getElementById('myvidsrc1').src=int3d.colGiffys[0];
-      //getElementById('myvidsrc2').src=int3d.colGiffys[1];
-      //getElementById('myvidsrc3').src=int3d.colGiffys[2];
+ 
       callback(inSrch, int3d.GenerateObjects);
 
     });
@@ -80,13 +80,9 @@ var int3d = {
     int3d.camera = new THREE.PerspectiveCamera(75, (int3d.mywidth / int3d.myheight), 0.1, 1000);
     int3d.camera.position.z = 0;
     int3d.renderer.setSize(int3d.mywidth, int3d.myheight);
-    int3d.GetGiffys('Superman', int3d.getWikiData);
-    //int3d.GetGiffys('Superman', int3d.getWikiData('Superman',int3d.GenerateObjects()));
-    //int3d.getWikiData('Superman',int3d.GenerateObjects());
+    int3d.GetGiffys('Star Wars', int3d.getWikiData);
+   
     $(document).on('click', function (e) {
-      //let video = document.getElementById('myvideo');
-      //video.loop=true;
-      //video.play();
       let vid = document.getElementById('myvideo');
       vid.loop = true;
       vid.play();
@@ -96,8 +92,7 @@ var int3d = {
       e.preventDefault();
       int3d.mylastevent = e;
       let video = document.getElementById('myvideo');
-      //video.loop=true;
-      //video.play();   
+   
 
     });
     inJQueryDomElement.on('touchend', function (e) {
@@ -187,27 +182,54 @@ var int3d = {
     xc.fillRect(0, 0, can.width, can.height);
     xc.shadowBlur = 7;
     xc.fillStyle = "white";
-    xc.font = "20pt arial bold";
-    xc.fillText(inTitle, 80, 5);
-    xc.font = "10pt arial bold";
-    $.each(int3d.GetTextArray(inArticle, int3d.maxcharacterswide),
+    xc.font = "15pt arial bold";
+    
+
+    let ypos = 5;
+    $.each(int3d.GetTextArray(inTitle, 30),
       function (i, item) {
-        xc.fillText(item, 20, 40 + (12 * i));
+        
+        xc.fillText(item, 5, ypos);
+        ypos += 15;
+      });
+    ypos += 10;
+    xc.font = "8pt arial bold";
+    $.each(int3d.GetTextArray(inArticle, int3d.maxcharacterswide),
+      function (i, item) {        
+        xc.fillText(item, 10, ypos);
+        ypos += 12;
       });
 
     //add map here
     let xm = '';
-    if (Math.random() > .5) {
+    let myrnd = Math.random();
+    switch(true)
+    {
+      case myrnd < .25:
       xm = new THREE.MeshBasicMaterial({
         map: int3d.NewTex
       });
       xm.map.needsUpdate = true;
-    } else {
+      break;
+      case myrnd < .50:
+      xm = new THREE.MeshBasicMaterial({
+        map: int3d.NewTex2
+      });
+      xm.map.needsUpdate = true;
+      break;
+      case myrnd < .75:
+      xm = new THREE.MeshBasicMaterial({
+        map: int3d.NewTex3
+      });
+      xm.map.needsUpdate = true;
+      break;
+      default:
       xm = new THREE.MeshBasicMaterial({
         map: new THREE.Texture(can), transparent: true
       });
       xm.map.needsUpdate = true;
     }
+    
 
     let material = new THREE.MeshFaceMaterial([
       new THREE.MeshBasicMaterial({
@@ -254,44 +276,78 @@ var int3d = {
     THREE.ImageUtils.crossOrigin = '';
     let video = document.getElementById('myvideo');
     video.setAttribute('crossorigin', 'anonymous');
-    video.src = int3d.colGiffys[Math.floor(Math.random()) * 10];
-
+    let video2 = document.getElementById('myvideo2');
+    video2.setAttribute('crossorigin', 'anonymous');
+    let video3 = document.getElementById('myvideo3');
+    video3.setAttribute('crossorigin', 'anonymous');
+    
+    video.src = int3d.colGiffys[0];
+    video2.src = int3d.colGiffys[1];
+    video3.src = int3d.colGiffys[2];
     video.load();
     video.addEventListener('loadeddata', function () {
-      video.loop = true;
-      video.play();
-      var texture = new THREE.VideoTexture(video);
-      texture.minFilter = THREE.LinearFilter;
-      texture.magFilter = THREE.LinearFilter;
-      texture.format = THREE.RGBFormat;
-      texture.needsUpdate = true;
-      int3d.NewTex = texture;
-      for (let i = 0; i < 10; i++) {
-        // Video is loaded and can be played
-        let myTitle = int3d.colHeadings[(i+1)];
-        let myArticle = int3d.colArticles[(i+1)];
-        let myLink = int3d.colLinks[(i+1)]; 
+      video2.load();
+      video2.addEventListener('loadeddata', function () {
+        video3.load();
+        video3.addEventListener('loadeddata', function () {
+          video.loop = true;
+          video.play();
+          video2.loop = true;
+          video2.play();
+          video3.loop = true;
+          video3.play();
+          var texture1 = new THREE.VideoTexture(video);
+          texture1.minFilter = THREE.LinearFilter;
+          texture1.magFilter = THREE.LinearFilter;
+          texture1.format = THREE.RGBFormat;
+          texture1.needsUpdate = true;
+        
+          var texture2 = new THREE.VideoTexture(video2);
+          texture2.minFilter = THREE.LinearFilter;
+          texture2.magFilter = THREE.LinearFilter;
+          texture2.format = THREE.RGBFormat;
+          texture2.needsUpdate = true;
+        
+          var texture3 = new THREE.VideoTexture(video3);
+          texture3.minFilter = THREE.LinearFilter;
+          texture3.magFilter = THREE.LinearFilter;
+          texture3.format = THREE.RGBFormat;
+          texture3.needsUpdate = true;
+          
+         
+          int3d.NewTex = texture1
+          int3d.NewTex2 = texture2
+          int3d.NewTex3 = texture3
+          
 
-        cuby = -4;
-
-        let xz = int3d.rotate(0, 0, cubx, cubz, ((360 / 10) * i));
-        let cubeA = int3d.GenerateCube('cubeA' + i, xz[0], cuby, xz[1], myTitle, myArticle, myLink );
-        cuby = 0;
-        xy = int3d.rotate(0, 0, cuby, cubx, ((360 / 10) * i));
-        let cubeB = int3d.GenerateCube('cubeB' + i, xz[0], cuby, xz[1],  myTitle, myArticle, myLink );
-        cuby = 4;
-        xy = int3d.rotate(0, 0, cuby, cubx, ((360 / 10) * i));
-        let cubeC = int3d.GenerateCube('cubeC' + i, xz[0], cuby, xz[1], myTitle, myArticle, myLink );
-
-        int3d.scene.add(cubeA, cubeB, cubeC);
 
 
+          for (let i = 0; i < 10; i++) {
+            // Video is loaded and can be played
+            let myTitle = int3d.colHeadings[(i+1)];
+            let myArticle = int3d.colArticles[(i+1)];
+            let myLink = int3d.colLinks[(i+1)]; 
+    
+            cuby = -4;
+    
+            let xz = int3d.rotate(0, 0, cubx, cubz, ((360 / 10) * i));
+            let cubeA = int3d.GenerateCube('cubeA' + i, xz[0], cuby, xz[1], myTitle, myArticle, myLink );
+            cuby = 0;
+            xy = int3d.rotate(0, 0, cuby, cubx, ((360 / 10) * i));
+            let cubeB = int3d.GenerateCube('cubeB' + i, xz[0], cuby, xz[1],  myTitle, myArticle, myLink );
+            cuby = 4;
+            xy = int3d.rotate(0, 0, cuby, cubx, ((360 / 10) * i));
+            let cubeC = int3d.GenerateCube('cubeC' + i, xz[0], cuby, xz[1], myTitle, myArticle, myLink );
+    
+            int3d.scene.add(cubeA, cubeB, cubeC);
+                                        }
+         
 
-      }
-    }, false);
-
-    return;
-  },
+          }, false);
+        }, false);
+      }, false);
+        return;
+      },
   Animate: function () {
     //Code that runs every frame goes here
 
