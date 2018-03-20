@@ -22,19 +22,24 @@ var int3d = {
     int3d.camera = new THREE.PerspectiveCamera( 75, (int3d.mywidth/int3d.myheight), 0.1, 1000 );
     int3d.camera.position.z =0;
     int3d.renderer.setSize( int3d.mywidth, int3d.myheight );
-    int3d.GenerateObjects();   
-    inJQueryDomElement.on('touchstart',  function (e) {
-      //e.preventDefault();
-      int3d.mylastevent = e;
-      var video = document.getElementById( 'video' );
+    int3d.GenerateObjects();
+    $('#playbutton').on('click',function(e){
+      let video = document.getElementById('myvideo');
       video.loop=true;
       video.play();
+      //let vid = document.getElementById('myvideo');
+      //vid.loop=true;
+      //vid.play();
       
-      //int3d.Videos[0].play();
-      //$('#video').play();
+    });   
+    inJQueryDomElement.on('touchstart',  function (e) {
+      e.preventDefault();
+      int3d.mylastevent = e;
+         
+      
     });
     inJQueryDomElement.on('touchend', function (e) {      
-      //e.preventDefault();
+      e.preventDefault();
       let DeltaX = int3d.mylastevent.originalEvent.touches[0].pageX - e.originalEvent.changedTouches[0].pageX;
       console.log(DeltaX);
 
@@ -48,9 +53,8 @@ var int3d = {
     inJQueryDomElement.on('mousedown',function (e) {
     
       e.preventDefault();
-      var video = document.getElementById( 'video' );
-      video.loop=true;
-      video.play();
+     
+      
 
     
      int3d.mylastevent = e;
@@ -182,10 +186,10 @@ var int3d = {
     let angle = 0
     THREE.ImageUtils.crossOrigin = '';
     //int3d.NewTex = THREE.ImageUtils.loadTexture('https://anap73.github.io/Responsive-Portfolio.github.io/assets/images/AntMeHead.png');
-    var video = document.getElementById( 'video' );
+    let video = document.getElementById('myvideo');
     video.loop=true;
     video.play();
-    int3d.Videos[0] = video;
+   
 
     var texture = new THREE.VideoTexture( video );
     texture.minFilter = THREE.LinearFilter;
