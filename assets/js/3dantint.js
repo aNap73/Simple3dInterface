@@ -26,7 +26,11 @@ var int3d = {
     inJQueryDomElement.on('touchstart',  function (e) {
       e.preventDefault();
       int3d.mylastevent = e;
-      int3d.Videos[0].play();
+
+      var video = document.getElementById( 'video' );
+      video.loop=true;
+      video.play();
+      //int3d.Videos[0].play();
       //$('#video').play();
     });
     inJQueryDomElement.on('touchend', function (e) {      
@@ -44,7 +48,11 @@ var int3d = {
     inJQueryDomElement.on('mousedown',function (e) {
       //console.log(e.originalEvent.touches[0].pageX);
       e.preventDefault();
-      int3d.Videos[0].play();
+
+      var video = document.getElementById( 'video' );
+      video.loop=true;
+      video.play();
+      //int3d.Videos[0].play();
      int3d.mylastevent = e;
       
     });
