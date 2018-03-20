@@ -26,12 +26,14 @@ var int3d = {
     inJQueryDomElement.on('touchstart',  function (e) {
       e.preventDefault();
       int3d.mylastevent = e;
-      
+      int3d.Videos[0].play();
+      //$('#video').play();
     });
     inJQueryDomElement.on('touchend', function (e) {      
       e.preventDefault();
       let DeltaX = int3d.mylastevent.originalEvent.touches[0].pageX - e.originalEvent.changedTouches[0].pageX;
       console.log(DeltaX);
+
       //window.alert(DeltaX);
       int3d.ant3dMouse.x = e.originalEvent.changedTouches[0].pageX;
       int3d.ant3dMouse.y = e.originalEvent.changedTouches[0].pageY;
@@ -42,6 +44,7 @@ var int3d = {
     inJQueryDomElement.on('mousedown',function (e) {
       //console.log(e.originalEvent.touches[0].pageX);
       e.preventDefault();
+      int3d.Videos[0].play();
      int3d.mylastevent = e;
       
     });
@@ -161,7 +164,8 @@ var int3d = {
 
 
 
-  },  
+  },
+ Videos: [],  
  GenerateObjects(){
     //Generate 3 rows of 10 cubes
     let cubx = 0;
@@ -173,6 +177,7 @@ var int3d = {
     var video = document.getElementById( 'video' );
     video.loop=true;
     video.play();
+    int3d.Videos[0] = video;
 
     var texture = new THREE.VideoTexture( video );
     texture.minFilter = THREE.LinearFilter;
