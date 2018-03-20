@@ -1,5 +1,6 @@
 
 var int3d = {  
+  colGiffys:[],
   rotspeed: 0,
   maxcharacterswide: 40,
   scene: new THREE.Scene(),
@@ -12,8 +13,31 @@ var int3d = {
   ant3dMouse: new THREE.Vector2(),
   bBack: false,
   NewTex: '',
+  bProcessingGifs: false,
+  GetGiffys: function (inSrch, callback){
+    let gkey = "aGpceXfwMY5TKtoH39N128oj2HirwBKv";
+    let offset = Math.floor(Math.random()*125);
+        
+    $.ajax({
+               url: "https://api.giphy.com/v1/gifs/search?api_key=" + gkey + "&q='" + inSrch + "'&offset=" + offset + "&limit=1",
+               method: "GET",
+               async: false,
+             }).then(function(response) {
+               int3d.colGiffys = [];
+  
+               for(i=0;i<response.data.length;i++){
+                 let rd = response.data[i];
+                 let gif = rd.images.looping.mp4;               
+                 int3d.colGiffys.push(gif);
+               }
+               callback(); 
+    
+    });
+  },
   StartUp: function(inJQueryDomElement){
-    //Code that sets up your initial sceen here    
+    //Code that sets up your initial sceen here
+        
+    
     int3d.myheight = window.innerHeight*1;
     int3d.mywidth = window.innerWidth*1;
     
@@ -22,22 +46,23 @@ var int3d = {
     int3d.camera = new THREE.PerspectiveCamera( 75, (int3d.mywidth/int3d.myheight), 0.1, 1000 );
     int3d.camera.position.z =0;
     int3d.renderer.setSize( int3d.mywidth, int3d.myheight );
-    int3d.GenerateObjects();
+    int3d.GetGiffys('Batman',int3d.GenerateObjects);
+    
     $(document).on('click',function(e){
-      let video = document.getElementById('myvideo');
-      video.loop=true;
-      video.play();
-      //let vid = document.getElementById('myvideo');
-      //vid.loop=true;
-      //vid.play();
+      //let video = document.getElementById('myvideo');
+      //video.loop=true;
+      //video.play();
+      let vid = document.getElementById('myvideo');
+      vid.loop=true;
+      vid.play();
       
     });   
     inJQueryDomElement.on('touchstart',  function (e) {
       e.preventDefault();
       int3d.mylastevent = e;
       let video = document.getElementById('myvideo');
-      video.loop=true;
-      video.play();   
+      //video.loop=true;
+      //video.play();   
       
     });
     inJQueryDomElement.on('touchend', function (e) {      
@@ -181,7 +206,12 @@ var int3d = {
       cube.position.x=x;
       cube.position.y=y;
       cube.position.z=z;
+
+      
+     
       return cube;
+      //console.log(new Element( 'Q0CbN8sfihY', 0, 0, 240, 0 ));
+      //return new Element( 'Q0CbN8sfihY', 0, 0, 240, 0 );
 
 
 
@@ -194,38 +224,53 @@ var int3d = {
     let cuby = 0;
     let cubz = -12;
     let angle = 0
-    THREE.ImageUtils.crossOrigin = '';
-    //int3d.NewTex = THREE.ImageUtils.loadTexture('https://anap73.github.io/Responsive-Portfolio.github.io/assets/images/AntMeHead.png');
-    let video = document.getElementById('myvideo');
-    video.loop=true;
-    video.play();
-   
-
-    var texture = new THREE.VideoTexture( video );
-    texture.minFilter = THREE.LinearFilter;
-    texture.magFilter = THREE.LinearFilter;
-    texture.format = THREE.RGBFormat;
-    texture.needsUpdate=true;
-
-    int3d.NewTex = texture;
+    
         for(let i=0; i < 10; i ++){
-       
-          cuby=-4;
+    
           
-          let xz = int3d.rotate(0,0,cubx,cubz,((360/10)*i));
-          let cubeA = int3d.GenerateCube('cubeA' + i,xz[0],cuby,xz[1],0);
-          cuby=0;
-          xy = int3d.rotate(0,0,cuby,cubx,((360/10)*i));      
-          let cubeB = int3d.GenerateCube('cubeB' + i,xz[0],cuby,xz[1],0);
-          cuby=4;
-          xy = int3d.rotate(0,0,cuby,cubx,((360/10)*i));
-          let cubeC = int3d.GenerateCube('cubeC' + i,xz[0],cuby,xz[1],0);
           
-          int3d.scene.add(cubeA, cubeB, cubeC);
+          //int3d.NewTex = THREE.ImageUtils.loadTexture('https://anap73.github.io/Responsive-Portfolio.github.io/assets/images/AntMeHead.png');
+          //$('#myvideo').empty();
+          //let mysrc = $('<source src = "'+int3d.colGiffys[0]+'" type="video/mp4">')
+          //$('#myvideo').append(mysrc);
+          THREE.ImageUtils.crossOrigin = '';
+          let video = document.getElementById('myvideo');
+          let vidsrc = document.getElementById('myvidsrc');                     
+          $('#myvidsrc').attr('src',int3d.colGiffys[1]);
+          vidsrc.src=int3d.colGiffys[0];
+          video.loop=true;
+          video.load();
+          
+         
+          video.addEventListener('loadeddata', function() {
+            // Video is loaded and can be played
+            let ivideo = document.getElementById('myvideo');
+            ivideo.play();
+            var texture = new THREE.VideoTexture( ivideo );
+            texture.minFilter = THREE.LinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+            texture.format = THREE.RGBFormat;
+            texture.needsUpdate=true;
+        
+            int3d.NewTex = texture;
+            cuby=-4;
+          
+            let xz = int3d.rotate(0,0,cubx,cubz,((360/10)*i));
+            let cubeA = int3d.GenerateCube('cubeA' + i,xz[0],cuby,xz[1],0);
+            cuby=0;
+            xy = int3d.rotate(0,0,cuby,cubx,((360/10)*i));      
+            let cubeB = int3d.GenerateCube('cubeB' + i,xz[0],cuby,xz[1],0);
+            cuby=4;
+            xy = int3d.rotate(0,0,cuby,cubx,((360/10)*i));
+            let cubeC = int3d.GenerateCube('cubeC' + i,xz[0],cuby,xz[1],0);
+            
+            int3d.scene.add(cubeA, cubeB, cubeC);
+         }, false);  
+         
         }
 
       return;
-    let loader = new THREE.TextureLoader();
+    /*let loader = new THREE.TextureLoader();
     loader.crossOrigin = 'anonymous';
     // load a resource
     loader.load(
@@ -233,7 +278,7 @@ var int3d = {
       './assets/im/LukeNo.gif',
     
       // onLoad callback
-      function ( texture ) {
+        function ( texture ) {
         int3d.NewTex = texture;
         for(let i=0; i < 10; i ++){
        
@@ -260,7 +305,7 @@ var int3d = {
         console.log( 'An error happened.' );
         console.log( err );
       }
-    );
+    );*/
 
     
     
