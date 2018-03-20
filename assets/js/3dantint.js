@@ -35,7 +35,9 @@ var int3d = {
     inJQueryDomElement.on('touchstart',  function (e) {
       e.preventDefault();
       int3d.mylastevent = e;
-         
+      let video = document.getElementById('myvideo');
+      video.loop=true;
+      video.play();   
       
     });
     inJQueryDomElement.on('touchend', function (e) {      
@@ -48,6 +50,9 @@ var int3d = {
       int3d.ant3dMouse.y = e.originalEvent.changedTouches[0].pageY;
       int3d.mylastevent = e;
       int3d.rotspeed = DeltaX * .0001;
+      let video = document.getElementById('myvideo');
+      video.loop=true;
+      video.play();
     });
 
     inJQueryDomElement.on('mousedown',function (e) {
@@ -58,6 +63,9 @@ var int3d = {
 
     
      int3d.mylastevent = e;
+     let video = document.getElementById('myvideo');
+     video.loop=true;
+     video.play();
       
     });
     inJQueryDomElement.on('mouseup', function (e) {
@@ -69,7 +77,9 @@ var int3d = {
       int3d.rotspeed = DeltaX * .0001;
     
       int3d.mylastevent = e;
-    
+      let video = document.getElementById('myvideo');
+      video.loop=true;
+      video.play();
     });
     requestAnimationFrame(int3d.Animate);
       
