@@ -23,7 +23,7 @@ var int3d = {
     int3d.camera.position.z =0;
     int3d.renderer.setSize( int3d.mywidth, int3d.myheight );
     int3d.GenerateObjects();
-    $('#playbutton').on('click',function(e){
+    $(document).on('click',function(e){
       let video = document.getElementById('myvideo');
       video.loop=true;
       video.play();
