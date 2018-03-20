@@ -1,19 +1,22 @@
-THREE.ImageUtils.crossOrigin = '';
+
 var int3d = {  
   rotspeed: 0,
-  maxcharacterswide: 55,
+  maxcharacterswide: 40,
   scene: new THREE.Scene(),
   camera: new THREE.PerspectiveCamera(),
   renderer: new THREE.WebGLRenderer(),
+  //renderer: new THREE.CSS3DRenderer(),
   myheight: 0,
   mywidth: 0, 
   mylastevent:'',
   ant3dMouse: new THREE.Vector2(),
+  bBack: false,
+  NewTex: '',
   StartUp: function(inJQueryDomElement){
     //Code that sets up your initial sceen here    
     int3d.myheight = window.innerHeight*1;
     int3d.mywidth = window.innerWidth*1;
-    THREE.ImageUtils.crossOrigin = '';
+    
     inJQueryDomElement.append(int3d.renderer.domElement);    
   
     int3d.camera = new THREE.PerspectiveCamera( 75, (int3d.mywidth/int3d.myheight), 0.1, 1000 );
@@ -46,20 +49,12 @@ var int3d = {
       
       e.preventDefault();
 
-      ;
+      
       let DeltaX = int3d.mylastevent.clientX - e.clientX;
       int3d.rotspeed = DeltaX * .0001;
     
       int3d.mylastevent = e;
     
-      /*e.preventDefault();
-      
-      console.log(DeltaX);
-      //window.alert(DeltaX);
-      int3d.ant3dMouse.x = e.originalEvent.changedTouches[0].pageX;
-      int3d.ant3dMouse.y = e.originalEvent.changedTouches[0].pageY;
-      int3d.mylastevent = e;
-      int3d.rotspeed = DeltaX * .0001;*/
     });
     requestAnimationFrame(int3d.Animate);
       
@@ -87,17 +82,15 @@ var int3d = {
     return col;
   },
   GenerateCube: function(name,x,y,z){
+    
     //this code generates a cube, either text or image... atm
     let geometry = new THREE.BoxGeometry( 7, 3.5, 1  );  
-    //Get Image map
-    let anthead = THREE.ImageUtils.loadTexture('https://anap73.github.io/Responsive-Portfolio.github.io/assets/images/AntMeHead.png');
-    
-    //Get Text map
+        
     let can = document.createElement("canvas");    
     let xc = can.getContext("2d");
 
-    let inTitle =  "This is a Title...";
-    let inArticle = "This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article. This is an article.";
+    let inTitle =  "Urgent";
+    let inArticle = "Luke needs help. Apparently an iframe and an html video 5 element are completely not the same in THREE.js... Help if you can... I need to get Abu's stuff into a HTML VIDEO TAG.";
 
     xc.textBaseline = 'top';
     /// color for background    
@@ -113,14 +106,14 @@ var int3d = {
     xc.font = "10pt arial bold";
     $.each(int3d.GetTextArray(inArticle,int3d.maxcharacterswide),
     function (i, item){
-      xc.fillText(item, 20, 40+(11*i));
+      xc.fillText(item, 20, 40+(12*i));
     });
     
     //add map here
     let xm = '';
     if(Math.random()>.5){
       xm = new THREE.MeshBasicMaterial({
-        map: anthead
+        map: int3d.NewTex
          });    
       xm.map.needsUpdate = true;
     }else{
@@ -164,6 +157,10 @@ var int3d = {
       cube.position.y=y;
       cube.position.z=z;
       return cube;
+
+
+
+
   },  
  GenerateObjects(){
     //Generate 3 rows of 10 cubes
@@ -171,21 +168,74 @@ var int3d = {
     let cuby = 0;
     let cubz = -12;
     let angle = 0
-    for(let i=0; i < 10; i ++){
+    THREE.ImageUtils.crossOrigin = '';
+    //int3d.NewTex = THREE.ImageUtils.loadTexture('https://anap73.github.io/Responsive-Portfolio.github.io/assets/images/AntMeHead.png');
+    var video = document.getElementById( 'video' );
+    video.loop=true;
+    video.play();
+
+    var texture = new THREE.VideoTexture( video );
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.format = THREE.RGBFormat;
+    texture.needsUpdate=true;
+
+    int3d.NewTex = texture;
+        for(let i=0; i < 10; i ++){
        
-      cuby=-4;
-      
-      let xz = int3d.rotate(0,0,cubx,cubz,((360/10)*i));
-      let cubeA = int3d.GenerateCube('cubeA' + i,xz[0],cuby,xz[1],0);
-      cuby=0;
-      xy = int3d.rotate(0,0,cuby,cubx,((360/10)*i));      
-      let cubeB = int3d.GenerateCube('cubeB' + i,xz[0],cuby,xz[1],0);
-      cuby=4;
-      xy = int3d.rotate(0,0,cuby,cubx,((360/10)*i));
-      let cubeC = int3d.GenerateCube('cubeC' + i,xz[0],cuby,xz[1],0);
-      
-      int3d.scene.add(cubeA, cubeB, cubeC);
-    }
+          cuby=-4;
+          
+          let xz = int3d.rotate(0,0,cubx,cubz,((360/10)*i));
+          let cubeA = int3d.GenerateCube('cubeA' + i,xz[0],cuby,xz[1],0);
+          cuby=0;
+          xy = int3d.rotate(0,0,cuby,cubx,((360/10)*i));      
+          let cubeB = int3d.GenerateCube('cubeB' + i,xz[0],cuby,xz[1],0);
+          cuby=4;
+          xy = int3d.rotate(0,0,cuby,cubx,((360/10)*i));
+          let cubeC = int3d.GenerateCube('cubeC' + i,xz[0],cuby,xz[1],0);
+          
+          int3d.scene.add(cubeA, cubeB, cubeC);
+        }
+
+      return;
+    let loader = new THREE.TextureLoader();
+    loader.crossOrigin = 'anonymous';
+    // load a resource
+    loader.load(
+      // resource URL
+      './assets/im/LukeNo.gif',
+    
+      // onLoad callback
+      function ( texture ) {
+        int3d.NewTex = texture;
+        for(let i=0; i < 10; i ++){
+       
+          cuby=-4;
+          
+          let xz = int3d.rotate(0,0,cubx,cubz,((360/10)*i));
+          let cubeA = int3d.GenerateCube('cubeA' + i,xz[0],cuby,xz[1],0);
+          cuby=0;
+          xy = int3d.rotate(0,0,cuby,cubx,((360/10)*i));      
+          let cubeB = int3d.GenerateCube('cubeB' + i,xz[0],cuby,xz[1],0);
+          cuby=4;
+          xy = int3d.rotate(0,0,cuby,cubx,((360/10)*i));
+          let cubeC = int3d.GenerateCube('cubeC' + i,xz[0],cuby,xz[1],0);
+          
+          int3d.scene.add(cubeA, cubeB, cubeC);
+        }   
+      },
+   
+      // onProgress callback currently not supported
+      undefined,
+    
+      // onError callback
+      function ( err ) {
+        console.log( 'An error happened.' );
+        console.log( err );
+      }
+    );
+
+    
     
   },
   Animate: function () {
