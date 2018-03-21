@@ -1,5 +1,7 @@
 
 var int3d = {
+  Wcoef: 1,
+  Hcoef: 1,
   tempcanvas: '',
   colGiffys: [],
   rotspeed: 0,
@@ -79,8 +81,8 @@ var int3d = {
       video3.play();
   },
   Resize: function (){
-    int3d.myheight = window.innerHeight * .8;
-    int3d.mywidth = window.innerWidth * .6;
+    int3d.myheight = window.innerHeight * int3d.Hcoef;
+    int3d.mywidth = window.innerWidth * int3d.Wcoef;
     int3d.camera = new THREE.PerspectiveCamera(75, (int3d.mywidth / int3d.myheight), 0.1, 1000);
     int3d.renderer.setSize(int3d.mywidth, int3d.myheight);
   },
@@ -88,8 +90,8 @@ var int3d = {
     //Code that sets up your initial sceen here
     int3d.colGiffys.length = 0;
     int3d.rotspeed = 0;
-    int3d.myheight = window.innerHeight * .8;
-    int3d.mywidth = window.innerWidth * .6;
+    int3d.myheight = window.innerHeight * int3d.Hcoef;;
+    int3d.mywidth = window.innerWidth * int3d.Wcoef;
 
     while (int3d.scene.children.length > 0) { int3d.scene.remove(int3d.scene.children[0]); }
     int3d.renderer.renderLists.dispose();
