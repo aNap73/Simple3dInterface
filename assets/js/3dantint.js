@@ -159,19 +159,20 @@ var int3d = {
     $(document).off('touchstart');
     $(document).on('touchstart', function (e) {
       e.preventDefault();
-      
-      int3d.mylastevent = e;
-      int3d.RunVideos();
       int3d.ant3dMouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
 		  int3d.ant3dMouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
       int3d.bFireDetectObjectsUnderMouse = true;
+      
+      int3d.mylastevent = e;
+      int3d.RunVideos();
+
     });
     $(document).off('touchend');
     $(document).on('touchend', function (e) {
       e.preventDefault();
       int3d.DeltaX = int3d.mylastevent.originalEvent.touches[0].pageX - e.originalEvent.changedTouches[0].pageX;
-      int3d.ant3dMouse.x = e.originalEvent.changedTouches[0].pageX;
-      int3d.ant3dMouse.y = e.originalEvent.changedTouches[0].pageY;
+      //int3d.ant3dMouse.x = e.originalEvent.changedTouches[0].pageX;
+      //int3d.ant3dMouse.y = e.originalEvent.changedTouches[0].pageY;
       int3d.mylastevent = e;
       int3d.rotspeed = int3d.DeltaX * .0001;
       int3d.RunVideos();
