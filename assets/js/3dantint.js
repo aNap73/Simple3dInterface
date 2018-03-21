@@ -158,11 +158,11 @@ var int3d = {
     //inJQueryDomElement = $('.mycanvas');
     $(document).off('touchstart');
     $(document).on('touchstart', function (e) {
-      e.preventDefault();
+      //e.preventDefault();
       int3d.ant3dMouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
 		  int3d.ant3dMouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
       int3d.bFireDetectObjectsUnderMouse = true;
-      
+
       int3d.mylastevent = e;
       int3d.RunVideos();
 
