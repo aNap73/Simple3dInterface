@@ -152,9 +152,7 @@ var int3d = {
       int3d.RunVideos();
        
       
-      int3d.ant3dMouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
-		  int3d.ant3dMouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
-      int3d.bFireDetectObjectsUnderMouse = true;
+
       
     });
     //inJQueryDomElement = $('.mycanvas');
@@ -164,6 +162,9 @@ var int3d = {
       
       int3d.mylastevent = e;
       int3d.RunVideos();
+      int3d.ant3dMouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+		  int3d.ant3dMouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+      int3d.bFireDetectObjectsUnderMouse = true;
     });
     $(document).off('touchend');
     $(document).on('touchend', function (e) {
@@ -181,6 +182,9 @@ var int3d = {
       
       int3d.mylastevent = e;
       int3d.RunVideos();
+      int3d.ant3dMouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+		  int3d.ant3dMouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+      int3d.bFireDetectObjectsUnderMouse = true;
      
     });
     $(document).off('mouseup');
