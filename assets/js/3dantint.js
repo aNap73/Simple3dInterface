@@ -83,22 +83,34 @@ var int3d = {
     int3d.GetGiffys(inSrch, int3d.getWikiData);
    
     $(document).on('click', function (e) {
-      let vid = document.getElementById('myvideo');
-      vid.loop = true;
-      vid.play();
+      
+
+
+      int3d.mylastevent = e;
+      let video = document.getElementById('myvideo');
+      let video2 = document.getElementById('myvideo2');
+      let video3 = document.getElementById('myvideo3');
+      video.loop = true;
+      video.play();
+
+      video2.loop = true;
+      video2.play();
+
+      video3.loop = true;
+      video3.play();
 
     });
     inJQueryDomElement.on('touchstart', function (e) {
-      e.preventDefault();
+      
       int3d.mylastevent = e;
       let video = document.getElementById('myvideo');
    
 
     });
     inJQueryDomElement.on('touchend', function (e) {
-      e.preventDefault();
+      
       let DeltaX = int3d.mylastevent.originalEvent.touches[0].pageX - e.originalEvent.changedTouches[0].pageX;
-      console.log(DeltaX);
+      
 
 
       int3d.ant3dMouse.x = e.originalEvent.changedTouches[0].pageX;
@@ -112,11 +124,7 @@ var int3d = {
 
     inJQueryDomElement.on('mousedown', function (e) {
 
-      e.preventDefault();
-
-
-
-
+      
       int3d.mylastevent = e;
       let video = document.getElementById('myvideo');
       video.loop = true;
@@ -124,8 +132,8 @@ var int3d = {
 
     });
     inJQueryDomElement.on('mouseup', function (e) {
-
-      e.preventDefault();
+      
+      
 
 
       let DeltaX = int3d.mylastevent.clientX - e.clientX;
@@ -135,6 +143,21 @@ var int3d = {
       let video = document.getElementById('myvideo');
       video.loop = true;
       video.play();
+    });
+
+
+    $('.mycanvas').on('click', function (e) {
+      
+
+      
+      let DeltaX = int3d.mylastevent.clientX - e.clientX;
+      int3d.rotspeed = DeltaX * .0001;
+
+      int3d.mylastevent = e;
+      let video = document.getElementById('myvideo');
+      video.loop = true;
+      video.play();
+
     });
     requestAnimationFrame(int3d.Animate);
 
@@ -369,5 +392,5 @@ var int3d = {
   }
 }
 $(document).ready(function () {
-  int3d.StartUp($("#rightherebaby"),'Star Wars');
+  int3d.StartUp($("#rightherebaby"),'Star Trek');
 });
