@@ -64,6 +64,20 @@ var int3d = {
 
     });
   },
+  RunVideos: function(){
+      let video = document.getElementById('myvideo');
+      let video2 = document.getElementById('myvideo2');
+      let video3 = document.getElementById('myvideo3');
+      
+      video.loop = true;
+      video.play();
+
+      video2.loop = true;
+      video2.play();
+
+      video3.loop = true;
+      video3.play();
+  },
   Resize: function (){
     int3d.myheight = window.innerHeight * .8;
     int3d.mywidth = window.innerWidth * .6;
@@ -107,40 +121,16 @@ var int3d = {
     $(document).off('click');
     $(document).on('click', function (e) {
 
-
-
       int3d.mylastevent = e;
-      let video = document.getElementById('myvideo');
-      let video2 = document.getElementById('myvideo2');
-      let video3 = document.getElementById('myvideo3');
+      int3d.RunVideos();
       
-      video.loop = true;
-      video.play();
-
-      video2.loop = true;
-      video2.play();
-
-      video3.loop = true;
-      video3.play();
-
     });
     //inJQueryDomElement = $('.mycanvas');
     $(document).off('touchstart');
     $(document).on('touchstart', function (e) {
       e.preventDefault();
       int3d.mylastevent = e;
-      let video = document.getElementById('myvideo');
-      let video2 = document.getElementById('myvideo2');
-      let video3 = document.getElementById('myvideo3');
-      
-      video.loop = true;
-      video.play();
-
-      video2.loop = true;
-      video2.play();
-
-      video3.loop = true;
-      video3.play();
+      int3d.RunVideos();
     });
     $(document).off('touchend');
     $(document).on('touchend', function (e) {
@@ -150,33 +140,24 @@ var int3d = {
       int3d.ant3dMouse.y = e.originalEvent.changedTouches[0].pageY;
       int3d.mylastevent = e;
       int3d.rotspeed = DeltaX * .0001;
+      int3d.RunVideos();
 
     });
     $(document).off('mousedown');
     $(document).on('mousedown', function (e) {
       int3d.mylastevent = e;
-
-      let video = document.getElementById('myvideo');
-      let video2 = document.getElementById('myvideo2');
-      let video3 = document.getElementById('myvideo3');
-      
-      video.loop = true;
-      video.play();
-
-      video2.loop = true;
-      video2.play();
-
-      video3.loop = true;
-      video3.play();
+      int3d.RunVideos();
+     
     });
     $(document).off('mouseup');
     $(document).on('mouseup', function (e) {
       let DeltaX = int3d.mylastevent.clientX - e.clientX;
       int3d.rotspeed = DeltaX * .0001;
       int3d.mylastevent = e;
+      int3d.RunVideos();
     });
 
-
+    
     int3d.GetGiffys(inSrch, int3d.getWikiData);
 
 
