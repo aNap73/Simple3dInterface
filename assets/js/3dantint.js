@@ -104,7 +104,7 @@ var int3d = {
     inJQueryDomElement.append(int3d.renderer.domElement);
 
 
-  
+    $(document).off('click');
     $(document).on('click', function (e) {
 
 
@@ -125,7 +125,7 @@ var int3d = {
 
     });
     //inJQueryDomElement = $('.mycanvas');
-  
+    $(document).off('touchstart');
     $(document).on('touchstart', function (e) {
       e.preventDefault();
       int3d.mylastevent = e;
@@ -142,7 +142,7 @@ var int3d = {
       video3.loop = true;
       video3.play();
     });
-    
+    $(document).off('touchend');
     $(document).on('touchend', function (e) {
       e.preventDefault();
       let DeltaX = int3d.mylastevent.originalEvent.touches[0].pageX - e.originalEvent.changedTouches[0].pageX;
@@ -152,7 +152,7 @@ var int3d = {
       int3d.rotspeed = DeltaX * .0001;
 
     });
-    
+    $(document).off('mousedown');
     $(document).on('mousedown', function (e) {
       int3d.mylastevent = e;
 
@@ -169,7 +169,7 @@ var int3d = {
       video3.loop = true;
       video3.play();
     });
-    
+    $(document).off('mouseup');
     $(document).on('mouseup', function (e) {
       let DeltaX = int3d.mylastevent.clientX - e.clientX;
       int3d.rotspeed = DeltaX * .0001;
