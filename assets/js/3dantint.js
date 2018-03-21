@@ -155,6 +155,19 @@ var int3d = {
     
     $(document).on('mousedown', function (e) {
       int3d.mylastevent = e;
+
+      let video = document.getElementById('myvideo');
+      let video2 = document.getElementById('myvideo2');
+      let video3 = document.getElementById('myvideo3');
+      
+      video.loop = true;
+      video.play();
+
+      video2.loop = true;
+      video2.play();
+
+      video3.loop = true;
+      video3.play();
     });
     
     $(document).on('mouseup', function (e) {
