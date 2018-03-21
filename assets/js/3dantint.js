@@ -1,5 +1,6 @@
 
 var int3d = {
+  DeltaX: 0,
   Wcoef: 1,
   Hcoef: 1,
   tempcanvas: '',
@@ -23,6 +24,30 @@ var int3d = {
   colHeadings: [],
   colArticles: [],
   colLinks: [],
+  bFireDetectObjectsUnderMouse: false,
+  antDetectObjectsUnderMouse: function(){
+    let col = [];
+    if(!int3d.bFireDetectObjectsUnderMouse ){
+      
+      return col;
+    };
+    $('#output').text(' ');
+    int3d.bFireDetectObjectsUnderMouse = false;
+  
+    //Detect Objects Under Mouse
+    let ray = new THREE.Raycaster();
+  
+    ray.setFromCamera( int3d.ant3dMouse, int3d.camera );
+    // calculate objects intersecting the picking ray
+    col = ray.intersectObjects(int3d.scene.children);
+    
+    if(col.length > 0){
+      $('#output').text(col[0].object.antName);
+      }
+            
+    return col;
+
+  },
   getWikiData: function (SearchTerm, callback) {
     $.ajax({
       type: "GET",
@@ -118,43 +143,50 @@ var int3d = {
 
     
     inJQueryDomElement.append(int3d.renderer.domElement);
-
-
+    
+    
     $(document).off('click');
     $(document).on('click', function (e) {
-
+      
       int3d.mylastevent = e;
       int3d.RunVideos();
+       
+      
+      int3d.ant3dMouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+		  int3d.ant3dMouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+      int3d.bFireDetectObjectsUnderMouse = true;
       
     });
     //inJQueryDomElement = $('.mycanvas');
     $(document).off('touchstart');
     $(document).on('touchstart', function (e) {
       e.preventDefault();
+      
       int3d.mylastevent = e;
       int3d.RunVideos();
     });
     $(document).off('touchend');
     $(document).on('touchend', function (e) {
       e.preventDefault();
-      let DeltaX = int3d.mylastevent.originalEvent.touches[0].pageX - e.originalEvent.changedTouches[0].pageX;
+      int3d.DeltaX = int3d.mylastevent.originalEvent.touches[0].pageX - e.originalEvent.changedTouches[0].pageX;
       int3d.ant3dMouse.x = e.originalEvent.changedTouches[0].pageX;
       int3d.ant3dMouse.y = e.originalEvent.changedTouches[0].pageY;
       int3d.mylastevent = e;
-      int3d.rotspeed = DeltaX * .0001;
+      int3d.rotspeed = int3d.DeltaX * .0001;
       int3d.RunVideos();
 
     });
     $(document).off('mousedown');
     $(document).on('mousedown', function (e) {
+      
       int3d.mylastevent = e;
       int3d.RunVideos();
      
     });
     $(document).off('mouseup');
     $(document).on('mouseup', function (e) {
-      let DeltaX = int3d.mylastevent.clientX - e.clientX;
-      int3d.rotspeed = DeltaX * .0001;
+      int3d.DeltaX = int3d.mylastevent.clientX - e.clientX;
+      int3d.rotspeed = int3d.DeltaX * .0001;
       int3d.mylastevent = e;
       int3d.RunVideos();
     });
@@ -403,7 +435,7 @@ var int3d = {
   },
   Animate: function () {
     //Code that runs every frame goes here
-
+    let graObj = int3d.antDetectObjectsUnderMouse();
     int3d.scene.rotation.y += int3d.rotspeed;
     $.each(int3d.scene.children, function (i, item) {
       item.rotation.y += -int3d.rotspeed;
