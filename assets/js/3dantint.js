@@ -581,6 +581,8 @@ var ant3d = {
   Animate: function () {
     //Code that runs every frame goes here
     let graObj = ant3d.antDetectObjectsUnderMouse();
+    console.log('GRAB OBJ');
+    console.log(graObj);
     if(graObj.length>0){
       console.log(graObj[0]);
     };      
