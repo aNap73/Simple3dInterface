@@ -76,13 +76,17 @@ var ant3d = {
               maxResults: 3
       });      
       request.execute(function(response)  {
-              console.log('YT RESPONSE');  
-              console.log(response);
+              //console.log('YT RESPONSE');  
+              //console.log(response);
+              ant3d.colYTVidIds.length=0;
+              ant3d.colYTVidImgs.length=0;
               let srchItems = response.result.items;                      
               $.each(srchItems, function(index, item) {
                 //let vidTitle = item.snippet.title;
-                console.log('VID');
-                console.log(item);                
+                //console.log('VID');
+                //console.log(item);               
+                ant3d.colYTVidIds.push(item.id);
+                ant3d.colYTVidImgs.push(item.snippet.thumbnails.default.url);                 
               });  
               ant3d.GenerateObjects();
             });  
