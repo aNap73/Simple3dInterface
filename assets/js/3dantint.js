@@ -581,8 +581,7 @@ var ant3d = {
   Animate: function () {
     //Code that runs every frame goes here
     let graObj = ant3d.antDetectObjectsUnderMouse();
-    if(graObj){
-      console.clear();
+    if(graObj.length>0){
       console.log(graObj[0]);
     };      
     ant3d.scene.rotation.y += ant3d.rotspeed;
