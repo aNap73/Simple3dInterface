@@ -239,7 +239,7 @@ var ant3d = {
     $(document).on('mouseup', function (e) {
       ant3d.UpdateMouse(e);
       ant3d.DeltaX = ant3d.mylastevent.clientX - e.clientX;
-      console.log(ant3d.DeltaX);
+      //console.log(ant3d.DeltaX);
       ant3d.rotspeed = ant3d.DeltaX * .0001;
       ant3d.mylastevent = e;
       ant3d.RunVideos();
@@ -251,7 +251,7 @@ var ant3d = {
 
   },
   UpdateMouse: function (e){
-    console.log(e);
+    //console.log(e);
     //ant3d.ant3dMouse.x = ( e.clientX / (ant3d.jRightHereBaby.innerWidth * ant3d.Wcoef) ) * 2 - 1;
     //ant3d.ant3dMouse.y = - ( e.clientY / (ant3d.jRightHereBaby.innerHeight * ant3d.Hcoef) ) * 2 + 1;
     ant3d.ant3dMouse.x = ( e.clientX / (window.innerWidth * ant3d.Wcoef) ) * 2 - 1;
@@ -584,6 +584,7 @@ var ant3d = {
      if(graObj[0]){
       console.log('GRAB OBJ');
       console.log(graObj[0]);
+      
     };      
     ant3d.scene.rotation.y += ant3d.rotspeed;
     $.each(ant3d.scene.children, function (i, item) {
