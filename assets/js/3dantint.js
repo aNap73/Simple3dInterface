@@ -441,7 +441,11 @@ var ant3d = {
     //Store data refs in cube
     cube.MyType = cubetype;
     cube.MyTypeId = cubetypeid;
-
+    cube.GifLink = '';
+    cube.YouTubeId = '';
+    cube.Title = '';
+    cube.Article ='';
+    cube.WikiLink = '';
     switch (cubetype) {
       case 'html5Vid':
         switch (cubetypeid) {
@@ -475,6 +479,7 @@ var ant3d = {
         cube.WikiLink = inLink;
         break;
     }
+    
     return cube;
   },
   Videos: [],
@@ -603,10 +608,10 @@ var ant3d = {
 
     if (graObj[0]) {
       console.log('graObj');
-      console.log(graObj);
-      ant3d.CurGiffy = graObj[0].object.GifLink;
-      ant3d.CurYouTube = graObj[0].object.YouTubeId;
-      ant3d.ReadText = graObj[0].object.Title + ' ' + graObj[0].object.Article;
+      console.log(graObj[0]);
+      ant3d.CurGiffy = graObj[0].GifLink;
+      ant3d.CurYouTube = graObj[0].YouTubeId;
+      ant3d.ReadText = graObj[0].Title + ' ' + graObj[0].Article;
       if(ant3d.bDblClick===true){
         setTimeout(function () {
           ant3d.callpage(ant3d.CurGiffy, ant3d.CurYouTube, ant3d.ReadText);
