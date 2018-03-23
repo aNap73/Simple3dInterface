@@ -77,18 +77,16 @@ var ant3d = {
               maxResults: 3
       });      
       request.execute(function(response)  {
-              console.log('Cors tube is my enemy');
-              console.log(response);
+
               ant3d.colYTVidIds.length=0;
               ant3d.colYTVidImgs.length=0;
               let srchItems = response.result.items;                      
               $.each(srchItems, function(index, item) {
-
+                console.log(item);
                 ant3d.colYTVidIds.push(item.id);
-                //ant3d.colYTVidImgs.push('http://cors-anywhere.herokuapp.com/http://img.youtube.com/vi/'+item.id+'/mqdefault.jpg');
-                ant3d.colYTVidImgs.push('http://cors-anywhere.herokuapp.com/'+item.snippet.thumbnails.default.url);
-                                 
-                //ant3d.colYTVidImgs.push('http://img.youtube.com/vi/' + item.id + '/[thumbnail-number].jpg');
+                // I owe you a beer CORS man... XXXOOO  
+                ant3d.colYTVidImgs.push('http://cors-anywhere.herokuapp.com/'+item.snippet.thumbnails.default.url);                                 
+
               });  
               ant3d.GenerateObjects();
             });  
