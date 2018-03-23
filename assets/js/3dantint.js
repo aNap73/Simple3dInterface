@@ -77,19 +77,16 @@ var ant3d = {
               maxResults: 3
       });      
       request.execute(function(response)  {
-              //console.log('YT RESPONSE');  
-              //console.log(response);
+
               ant3d.colYTVidIds.length=0;
               ant3d.colYTVidImgs.length=0;
               let srchItems = response.result.items;                      
               $.each(srchItems, function(index, item) {
-                //let vidTitle = item.snippet.title;
-                //console.log('VID');
-                //console.log(item);               
+
                 ant3d.colYTVidIds.push(item.id);
                 
-                //ant3d.colYTVidImgs.push(item.snippet.thumbnails.default.url);                 
-                ant3d.colYTVidImgs.push('http://img.youtube.com/vi/' + item.id + '/[thumbnail-number].jpg');
+                ant3d.colYTVidImgs.push(item.snippet.thumbnails.default.url);                 
+                //ant3d.colYTVidImgs.push('http://img.youtube.com/vi/' + item.id + '/[thumbnail-number].jpg');
               });  
               ant3d.GenerateObjects();
             });  
@@ -467,7 +464,7 @@ var ant3d = {
     let cuby = 0;
     let cubz = -12;
     let angle = 0
-    THREE.ImageUtils.crossOrigin = '';
+    THREE.ImageUtils.crossOrigin = 'anonymous';
     let video = document.getElementById('myvideo');
     video.setAttribute('crossorigin', 'anonymous');
     let video2 = document.getElementById('myvideo2');
