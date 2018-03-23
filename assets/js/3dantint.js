@@ -511,7 +511,7 @@ var ant3d = {
           texture3.format = THREE.RGBFormat;
           texture3.needsUpdate = true;
 
-          let texture4 = THREE.ImageUtils.loadTexture(  [0]);
+          let texture4 = THREE.ImageUtils.loadTexture(ant3d.colYTVidImgs[0]);
 
           let texture5 = THREE.ImageUtils.loadTexture(ant3d.colYTVidImgs[1]);
 
