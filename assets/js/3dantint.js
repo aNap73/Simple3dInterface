@@ -110,9 +110,9 @@ var ant3d = {
         ant3d.colLinks.push(jsondata[3][index]);
 
       })     
-      
+      callback(SearchTerm);  
     });
-    callback(SearchTerm);
+    
   },
   GetGiffys: function (inSrch, callback) {
     let gkey = "aGpceXfwMY5TKtoH39N128oj2HirwBKv";
@@ -261,6 +261,7 @@ var ant3d = {
   },
   GetTextArray: function (inText, inLineLen) {
     //This function wraps text el-manuel aan.
+    
     let col = [];
     let wrkwords = inText.split(' ');
     let wrkline = '';
