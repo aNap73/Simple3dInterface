@@ -606,20 +606,18 @@ var ant3d = {
     //Code that runs every frame goes here
     let graObj = ant3d.antDetectObjectsUnderMouse();
 
-    if (graObj[0]) {
-      console.log('graObj');
-      console.log(graObj[0]);
-      ant3d.CurGiffy = graObj[0].GifLink;
-      ant3d.CurYouTube = graObj[0].YouTubeId;
-      ant3d.ReadText = graObj[0].Title + ' ' + graObj[0].Article;
+    if (graObj[0]) {      
       if(ant3d.bDblClick===true){
-        setTimeout(function () {
-          ant3d.callpage(ant3d.CurGiffy, ant3d.CurYouTube, ant3d.ReadText);
-          
+        console.log('graObj');
+        console.log(graObj[0]);
+        ant3d.CurGiffy = graObj[0].GifLink;
+        ant3d.CurYouTube = graObj[0].YouTubeId;
+        ant3d.ReadText = graObj[0].Title + ' ' + graObj[0].Article;
+        document.setTimeout(function () {
+          ant3d.callpage(ant3d.CurGiffy, ant3d.CurYouTube, ant3d.ReadText);          
         }, 1);
         ant3d.bDblClick=false;
-      }
-      
+      }      
     };
 
     ant3d.scene.rotation.y += ant3d.rotspeed;
