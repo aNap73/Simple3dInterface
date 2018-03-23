@@ -442,7 +442,8 @@ var ant3d = {
     //Store data refs in cube
     cube.MyType = cubetype;
     cube.MyTypeId = cubetypeid;
-    cube.GifLink = '';
+  
+    cube.MyGiffyLink = ''
     cube.YouTubeId = '';
     cube.Title = '';
     cube.Article ='';
@@ -451,13 +452,13 @@ var ant3d = {
       case 'html5Vid':
         switch (cubetypeid) {
           case 1:
-            cube.GifLink = ant3d.NewTex;
+            cube.MyGiffyLink = ant3d.colGiffys(0);
             break;
           case 2:
-            cube.GifLink = ant3d.NewTex2;
+            cube.MyGiffyLink = ant3d.colGiffys(1);
             break;
           case 3:
-            cube.GifLink = ant3d.NewTex3;
+            cube.MyGiffyLink = ant3d.colGiffys(2);
             break;
         };
         break;
