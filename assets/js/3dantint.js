@@ -584,7 +584,7 @@ var ant3d = {
     //Code that runs every frame goes here
     let graObj = ant3d.antDetectObjectsUnderMouse();
    
-     if(graObj[0].length>0){
+     if(graObj[0]){
       console.log('GRAB OBJ');
       console.log(graObj[0]);
     };      
