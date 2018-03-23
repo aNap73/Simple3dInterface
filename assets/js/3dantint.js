@@ -87,7 +87,9 @@ var ant3d = {
                 //console.log('VID');
                 //console.log(item);               
                 ant3d.colYTVidIds.push(item.id);
-                ant3d.colYTVidImgs.push(item.snippet.thumbnails.default.url);                 
+                
+                //ant3d.colYTVidImgs.push(item.snippet.thumbnails.default.url);                 
+                ant3d.colYTVidImgs.push('http://img.youtube.com/vi/' + item.id + '/[thumbnail-number].jpg');
               });  
               ant3d.GenerateObjects();
             });  
