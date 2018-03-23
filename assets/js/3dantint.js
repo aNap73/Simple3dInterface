@@ -14,6 +14,8 @@ var ant3d = {
   jRightHereBaby: '',
   tempcanvas: '',
   colGiffys: [],
+  colYTVidIds: [],
+  colYTVidImgs: [],
   rotspeed: 0,
   maxcharacterswide: 50,
   scene: new THREE.Scene(),
@@ -76,12 +78,14 @@ var ant3d = {
       request.execute(function(response)  {
               console.log('YT RESPONSE');  
               console.log(response);
-              var srchItems = response.result.items;                      
+              let srchItems = response.result.items;                      
               $.each(srchItems, function(index, item) {
-              let vidTitle = item.snippet.title;
+                //let vidTitle = item.snippet.title;
+                console.log('VID');
+                console.log(item);                
+              });  
               ant3d.GenerateObjects();
-              })  
-            })  
+            });  
      },
   getWikiData: function (SearchTerm) {
     $.ajax({
