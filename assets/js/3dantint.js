@@ -172,7 +172,7 @@ var ant3d = {
     ant3d.CurYouTube = '';
     ant3d.ReadText = '';
 
-    ant3d.callpage = inOutCallback
+    ant3d.callpage = inOutCallback;
     ant3d.jRightHereBaby = inJQueryDomElement;
     ant3d.colGiffys.length = 0;
     ant3d.rotspeed = 0;
@@ -607,7 +607,7 @@ var ant3d = {
       ant3d.ReadText = graObj[0].Title + ' ' + graObj[0].Article;
       if(ant3d.bDblClick===true){
         setTimeout(function () {
-          ant3d.inOutCallback(ant3d.CurGiffy, ant3d.CurYouTube, ant3d.ReadText);
+          ant3d.callpage(ant3d.CurGiffy, ant3d.CurYouTube, ant3d.ReadText);
           ant3d.bDblClick=false;
         }, 1);
       }
