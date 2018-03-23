@@ -155,7 +155,7 @@ var ant3d = {
       video3.play();
   },
   Resize: function (){
-       
+  
     ant3d.myheight = window.innerHeight * ant3d.Hcoef;;
     ant3d.mywidth = ant3d.jRightHereBaby.outerWidth()  * ant3d.Wcoef;//window.innerWidth * ant3d.Wcoef;
     ant3d.camera = new THREE.PerspectiveCamera(75, (ant3d.mywidth / ant3d.myheight), 0.1, 1000);
@@ -511,7 +511,7 @@ var ant3d = {
           texture3.format = THREE.RGBFormat;
           texture3.needsUpdate = true;
 
-          let texture4 = THREE.ImageUtils.loadTexture(ant3d.colYTVidImgs[0]);
+          let texture4 = THREE.ImageUtils.loadTexture(  [0]);
 
           let texture5 = THREE.ImageUtils.loadTexture(ant3d.colYTVidImgs[1]);
 
@@ -583,9 +583,9 @@ var ant3d = {
   Animate: function () {
     //Code that runs every frame goes here
     let graObj = ant3d.antDetectObjectsUnderMouse();
-    console.log('GRAB OBJ');
-    console.log(graObj);
-    if(graObj.length>0){
+   
+     if(graObj[0].length>0){
+      console.log('GRAB OBJ');
       console.log(graObj[0]);
     };      
     ant3d.scene.rotation.y += ant3d.rotspeed;
