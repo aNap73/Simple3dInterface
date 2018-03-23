@@ -613,7 +613,7 @@ var ant3d = {
         ant3d.CurGiffy = graObj[0].object.GifLink;
         ant3d.CurYouTube = graObj[0].object.YouTubeId;
         ant3d.ReadText = graObj[0].object.Title + ' ' + graObj[0].object.Article;
-        document.setTimeout(function () {
+        setTimeout(function () {
           ant3d.callpage(ant3d.CurGiffy, ant3d.CurYouTube, ant3d.ReadText);          
         }, 1);
         ant3d.bDblClick=false;
