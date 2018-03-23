@@ -452,13 +452,13 @@ var ant3d = {
       case 'html5Vid':
         switch (cubetypeid) {
           case 1:
-            cube.MyGiffyLink = ant3d.colGiffys(0);
+            cube.MyGiffyLink = ant3d.colGiffys[0];
             break;
           case 2:
-            cube.MyGiffyLink = ant3d.colGiffys(1);
+            cube.MyGiffyLink = ant3d.colGiffys[1];
             break;
           case 3:
-            cube.MyGiffyLink = ant3d.colGiffys(2);
+            cube.MyGiffyLink = ant3d.colGiffys[2];
             break;
         };
         break;
