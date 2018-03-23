@@ -83,7 +83,7 @@ var ant3d = {
               })  
             })  
      },
-  getWikiData: function (SearchTerm, callback) {
+  getWikiData: function (SearchTerm) {
     $.ajax({
       type: "GET",
       url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search="' + SearchTerm + '"&format=json&callback=?',
@@ -120,7 +120,7 @@ var ant3d = {
 
         ant3d.colGiffys.push(gif);
       }
-      callback(inSrch);
+      callback(inSrch, ant3d.getYouTubeData(inSrch));
       //callback(inSrch, ant3d.GenerateObjects);
 
     });
