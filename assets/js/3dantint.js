@@ -87,7 +87,7 @@ var ant3d = {
               ant3d.GenerateObjects();
             });  
      },
-  getWikiData: function (SearchTerm) {
+  getWikiData: function (SearchTerm,callback) {
     $.ajax({
       type: "GET",
       url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search="' + SearchTerm + '"&format=json&callback=?',
