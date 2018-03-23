@@ -11,6 +11,7 @@ function tryme(giff, youtube, text) {
   window.alert(text);
 }
 var ant3d = {
+  bDblClick: false,
   CurGiffy: '',
   CurYouTube: '',
   ReadText: '',
@@ -209,6 +210,12 @@ var ant3d = {
     ant3d.camera.position.z = 0;
 
     inJQueryDomElement.append(ant3d.renderer.domElement);
+    $(document).off('dblclick');
+    $(document).on('dblclick',
+      function(){
+        ant3d.bDblClick = true;
+      });
+    
 
     $(document).off('click');
     $(document).on('click', function (e) {
@@ -598,9 +605,13 @@ var ant3d = {
       ant3d.CurGiffy = graObj[0].GifLink;
       ant3d.CurYouTube = graObj[0].YouTubeId;
       ant3d.ReadText = graObj[0].Title + ' ' + graObj[0].Article;
-      setTimeout(function () {
-        ant3d.inOutCallback(ant3d.CurGiffy, ant3d.CurYouTube, ant3d.ReadText);
-      }, 1);
+      if(ant3d.bDblClick===true){
+        setTimeout(function () {
+          ant3d.inOutCallback(ant3d.CurGiffy, ant3d.CurYouTube, ant3d.ReadText);
+          ant3d.bDblClick=false;
+        }, 1);
+      }
+      
     };
 
     ant3d.scene.rotation.y += ant3d.rotspeed;
