@@ -86,7 +86,7 @@ var ant3d = {
 
                 ant3d.colYTVidIds.push(item.id);
                 //ant3d.colYTVidImgs.push('http://cors-anywhere.herokuapp.com/http://img.youtube.com/vi/'+item.id+'/mqdefault.jpg');
-                ant3d.colYTVidImgs.push(item.snippet.thumbnails.default.url);
+                ant3d.colYTVidImgs.push('http://cors-anywhere.herokuapp.com/'+item.snippet.thumbnails.default.url);
                                  
                 //ant3d.colYTVidImgs.push('http://img.youtube.com/vi/' + item.id + '/[thumbnail-number].jpg');
               });  
