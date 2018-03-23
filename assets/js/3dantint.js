@@ -604,9 +604,9 @@ var ant3d = {
     if (graObj[0]) {
       console.log('graObj');
       console.log(graObj);
-      ant3d.CurGiffy = graObj[0].GifLink;
-      ant3d.CurYouTube = graObj[0].YouTubeId;
-      ant3d.ReadText = graObj[0].Title + ' ' + graObj[0].Article;
+      ant3d.CurGiffy = graObj[0].object.GifLink;
+      ant3d.CurYouTube = graObj[0].object.YouTubeId;
+      ant3d.ReadText = graObj[0].object.Title + ' ' + graObj[0].object.Article;
       if(ant3d.bDblClick===true){
         setTimeout(function () {
           ant3d.callpage(ant3d.CurGiffy, ant3d.CurYouTube, ant3d.ReadText);
