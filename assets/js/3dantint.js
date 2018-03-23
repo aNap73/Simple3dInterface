@@ -30,6 +30,9 @@ var ant3d = {
   NewTex: '',
   NewTex2: '',
   NewTex3: '',
+  NewTex4: '',
+  NewTex5: '',
+  NewTex6: '',
   bProcessingGifs: false,
   colMovs: [],
   colHeadings: [],
@@ -52,9 +55,7 @@ var ant3d = {
     // calculate objects intersecting the picking ray
     col = ray.intersectObjects(ant3d.scene.children);
     
-    if(col.length > 0){
-      $('#output').text(col[0].object.antName);
-      }
+    
             
     return col;
 
@@ -188,9 +189,12 @@ var ant3d = {
     ant3d.colLinks.length = 0;
     inJQueryDomElement.empty();
 
-    ant3d.NewTex = '',
-    ant3d.NewTex2 = '',
-    ant3d.NewTex3 = '',
+    ant3d.NewTex = '';
+    ant3d.NewTex2 = '';
+    ant3d.NewTex3 = '';
+    ant3d.NewTex4 = '';
+    ant3d.NewTex5 = '';
+    ant3d.NewTex6 = '';
 
     ant3d.camera.position.z = 0;
     
@@ -318,26 +322,61 @@ var ant3d = {
     //add map here
     let xm = '';
     let myrnd = Math.random();
+    let cubetype = 'unknown';
+    let cubetypeid = -1;
     switch (true) {
-      case myrnd < .125:
+      case myrnd < .08333:
+        cubetype = 'html5Vid';
+        cubetypeid = 1;
         xm = new THREE.MeshBasicMaterial({
           map: ant3d.NewTex
         });
         xm.map.needsUpdate = true;
         break;
-      case myrnd < .25:
+      case myrnd < .08333 * 2:
+ 
+        cubetype = 'html5Vid';
+        cubetypeid = 2;
         xm = new THREE.MeshBasicMaterial({
           map: ant3d.NewTex2
         });
         xm.map.needsUpdate = true;
         break;
-      case myrnd < .5:
+      case myrnd < .08333 * 3:
+        cubetype = 'html5Vid';
+        cubetypeid = 3;
         xm = new THREE.MeshBasicMaterial({
           map: ant3d.NewTex3
         });
         xm.map.needsUpdate = true;
         break;
+      case myrnd < .08333 * 4:
+        cubetype = 'YouTube';
+        cubetypeid = 1;
+        xm = new THREE.MeshBasicMaterial({
+          map: ant3d.NewTex4
+        });
+        xm.map.needsUpdate = true;
+        break;
+      case myrnd < .08333 * 5:
+        cubetype = 'YouTube';
+        cubetypeid = 2;
+        xm = new THREE.MeshBasicMaterial({
+          map: ant3d.NewTex5
+        });
+        xm.map.needsUpdate = true;
+        break;
+      case myrnd < .08333 * 6:
+        cubetype = 'YouTube';
+        cubetypeid = 3;
+        xm = new THREE.MeshBasicMaterial({
+          map: ant3d.NewTex6
+        });
+        xm.map.needsUpdate = true;
+        break;    
       default:
+        cubetype = 'Wiki';
+        cubetypeid = 0;
         xm = new THREE.MeshBasicMaterial({
           //map: ant3d.NewTex3
           map: new THREE.Texture(ant3d.tempcanvas)
@@ -380,6 +419,43 @@ var ant3d = {
     cube.position.x = x;
     cube.position.y = y;
     cube.position.z = z;
+    //Store data refs in cube
+    cube.MyType = cubetype;
+    cube.MyTypeId = cubetypeid;
+    
+    switch(cubetype){
+      case 'html5Vid':
+       switch(cubetypeid){
+          case 1:
+           cube.GifLink = ant3d.NewTex;
+           break;
+          case 2:
+           cube.GifLink = ant3d.NewTex2;
+           break;
+          case 3:
+           cube.GifLink = ant3d.NewTex3;
+           break;
+       };
+       break;      
+      case 'YouTube':
+       switch(cubetypeid){
+        case 1:
+         cube.GifLink = ant3d.NewTex4;
+         break;
+        case 2:
+         cube.GifLink = ant3d.NewTex5;
+         break;
+        case 3:
+         cube.GifLink = ant3d.NewTex6;
+         break;
+       };
+       break;
+      case 'Wiki':
+        cube.Title = inTitle;
+        cube.Article = inArticle;
+        cube.WikiLink = inLink;       
+      break;
+    }
     return cube;
   },
   Videos: [],
@@ -433,12 +509,21 @@ var ant3d = {
           texture3.format = THREE.RGBFormat;
           texture3.needsUpdate = true;
 
+          let texture4 = THREE.ImageUtils.loadTexture(ant3d.colYTVidImgs[0]);
+
+          let texture5 = THREE.ImageUtils.loadTexture(ant3d.colYTVidImgs[1]);
+
+          let texture6 = THREE.ImageUtils.loadTexture(ant3d.colYTVidImgs[2]);
+          
+
 
           ant3d.NewTex = texture1
           ant3d.NewTex2 = texture2
           ant3d.NewTex3 = texture3
 
-
+          ant3d.NewTex4 = texture4
+          ant3d.NewTex5 = texture5
+          ant3d.NewTex6 = texture6
 
           let artid = 0;
           for (let i = 0; i < 10; i++) {
@@ -496,6 +581,10 @@ var ant3d = {
   Animate: function () {
     //Code that runs every frame goes here
     let graObj = ant3d.antDetectObjectsUnderMouse();
+    if(graObj){
+      console.clear();
+      console.log(graObj[0]);
+    };      
     ant3d.scene.rotation.y += ant3d.rotspeed;
     $.each(ant3d.scene.children, function (i, item) {
       item.rotation.y += -ant3d.rotspeed;
