@@ -57,21 +57,32 @@ var ant3d = {
     return col;
 
   },
-  getYouTubeData: function(inSrch, callback){
+  getYouTubeData: function(inSrch){
     gapi.client.setApiKey("AIzaSyBofD-GuDJbsXUs-eRaFlHrMmX7zF3vl24");
     gapi.client.load('youtube', 'v3', function() {
-      ant3d.makeYouTubeRequest(inSrch, callback);
+      ant3d.makeYouTubeRequest(inSrch);
     });
     
   }, 
-  makeYouTubeRequest: function(inSrch,callback) 
+  makeYouTubeRequest: function(inSrch) 
      {
-      var q = inSrch;
-      var request = gapi.client.youtube.search.list({
-      q: q,
-      part: 'snippet',
-      maxResults: 10
-    });},
+       
+      let q = $('#query').val();
+      let request = gapi.client.youtube.search.list({
+              q: q,
+              part: 'snippet',
+              maxResults: 3
+      });      
+      request.execute(function(response)  {
+              console.log('YT RESPONSE');  
+              console.log(response);
+              var srchItems = response.result.items;                      
+              $.each(srchItems, function(index, item) {
+              let vidTitle = item.snippet.title;
+              ant3d.GenerateObjects();
+              })  
+            })  
+     },
   getWikiData: function (SearchTerm, callback) {
     $.ajax({
       type: "GET",
@@ -88,9 +99,8 @@ var ant3d = {
         ant3d.colArticles.push(jsondata[2][index]);
         ant3d.colLinks.push(jsondata[3][index]);
 
-      })
-
-      callback();
+      })     
+      callback(SearchTerm);
     });
 
   },
@@ -110,8 +120,8 @@ var ant3d = {
 
         ant3d.colGiffys.push(gif);
       }
-
-      callback(inSrch, ant3d.GenerateObjects);
+      callback(inSrch);
+      //callback(inSrch, ant3d.GenerateObjects);
 
     });
   },
