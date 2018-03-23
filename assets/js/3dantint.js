@@ -305,6 +305,7 @@ var ant3d = {
 
 
     let ypos = 5;
+    if(inTitle){
     $.each(ant3d.GetTextArray(inTitle, 30),
       function (i, item) {
 
@@ -317,7 +318,7 @@ var ant3d = {
       function (i, item) {
         xc.fillText(item, 10, ypos);
         ypos += 12;
-      });
+      });}
 
     //add map here
     let xm = '';
