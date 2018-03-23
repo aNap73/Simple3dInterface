@@ -210,10 +210,11 @@ var ant3d = {
     ant3d.camera.position.z = 0;
 
     inJQueryDomElement.append(ant3d.renderer.domElement);
-    $(document).off('dblclick');
-    $(document).on('dblclick',
-      function(){
+    $(canvas).off('dblclick');
+    $(canvas).on('dblclick',
+      function(e){
         ant3d.bDblClick = true;
+        e.preventDefault();
       });
     
 
