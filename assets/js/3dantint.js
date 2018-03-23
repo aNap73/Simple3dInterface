@@ -70,7 +70,7 @@ var ant3d = {
   makeYouTubeRequest: function(inSrch) 
      {
        
-      let q = $('#query').val();
+      let q = inSrch;
       let request = gapi.client.youtube.search.list({
               q: q,
               part: 'snippet',
