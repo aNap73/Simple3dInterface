@@ -612,7 +612,7 @@ var ant3d = {
       if(ant3d.bDblClick===true){
         console.log('graObj');
         console.log(graObj[0].object);
-        ant3d.CurGiffy = graObj[0].object.GifLink;
+        ant3d.CurGiffy = graObj[0].object.MyGiffyLink;
         ant3d.CurYouTube = graObj[0].object.YouTubeId.videoId;
         ant3d.ReadText = graObj[0].object.Title + ' ' + graObj[0].object.Article;
         setTimeout(function () {
