@@ -597,7 +597,7 @@ var ant3d = {
     if (graObj[0]) {
       ant3d.CurGiffy = graObj[0].GifLink;
       ant3d.CurYouTube = graObj[0].YouTubeId;
-      ant3d.ReadText = cube.Title + ' ' + cube.Article;
+      ant3d.ReadText = graObj[0].Title + ' ' + graObj[0].Article;
       setTimeout(function () {
         ant3d.inOutCallback(ant3d.CurGiffy, ant3d.CurYouTube, ant3d.ReadText);
       }, 1);
