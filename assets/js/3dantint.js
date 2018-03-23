@@ -5,8 +5,16 @@
 
 //The script is interfaced by calling the ant3d.Startup method
 //with the parameters SearchText, $(DomElement). See bottom of code for example.
-
+function tryme(giff, youtube, text) {
+  window.alert(giff);
+  window.alert(youtube);
+  window.alert(text);
+}
 var ant3d = {
+  CurGiffy: '',
+  CurYouTube: '',
+  ReadText: '',
+  callpage: '',
   friction: .995,
   DeltaX: 0,
   Wcoef: 1,
@@ -39,59 +47,58 @@ var ant3d = {
   colArticles: [],
   colLinks: [],
   bFireDetectObjectsUnderMouse: false,
-  antDetectObjectsUnderMouse: function(){
+  antDetectObjectsUnderMouse: function () {
     let col = [];
-    if(!ant3d.bFireDetectObjectsUnderMouse ){
-      
+    if (!ant3d.bFireDetectObjectsUnderMouse) {
+
       return col;
     };
     $('#output').text(' ');
     ant3d.bFireDetectObjectsUnderMouse = false;
-  
+
     //Detect Objects Under Mouse
     let ray = new THREE.Raycaster();
-  
-    ray.setFromCamera( ant3d.ant3dMouse, ant3d.camera );
+
+    ray.setFromCamera(ant3d.ant3dMouse, ant3d.camera);
     // calculate objects intersecting the picking ray
     col = ray.intersectObjects(ant3d.scene.children);
-    
-    
-            
+
+
+
     return col;
 
   },
-  getYouTubeData: function(inSrch){
+  getYouTubeData: function (inSrch) {
     gapi.client.setApiKey("AIzaSyBofD-GuDJbsXUs-eRaFlHrMmX7zF3vl24");
-    gapi.client.load('youtube', 'v3', function() {
+    gapi.client.load('youtube', 'v3', function () {
       ant3d.makeYouTubeRequest(inSrch);
     });
-    
-  }, 
-  makeYouTubeRequest: function(inSrch) 
-     {
-       
-      let q = inSrch;
-      let request = gapi.client.youtube.search.list({
-              q: q,
-              part: 'snippet',
-              maxResults: 3
-      });      
-      request.execute(function(response)  {
 
-              ant3d.colYTVidIds.length=0;
-              ant3d.colYTVidImgs.length=0;
-              let srchItems = response.result.items;                      
-              $.each(srchItems, function(index, item) {
-                console.log(item);
-                ant3d.colYTVidIds.push(item.id);
-                // I owe you a beer CORS man... XXXOOO  
-                ant3d.colYTVidImgs.push('http://cors-anywhere.herokuapp.com/'+item.snippet.thumbnails.default.url);                                 
+  },
+  makeYouTubeRequest: function (inSrch) {
 
-              });  
-              ant3d.GenerateObjects();
-            });  
-     },
-  getWikiData: function (SearchTerm,callback) {
+    let q = inSrch;
+    let request = gapi.client.youtube.search.list({
+      q: q,
+      part: 'snippet',
+      maxResults: 3
+    });
+    request.execute(function (response) {
+
+      ant3d.colYTVidIds.length = 0;
+      ant3d.colYTVidImgs.length = 0;
+      let srchItems = response.result.items;
+      $.each(srchItems, function (index, item) {
+        console.log(item);
+        ant3d.colYTVidIds.push(item.id);
+        // I owe you a beer CORS man... XXXOOO  
+        ant3d.colYTVidImgs.push('http://cors-anywhere.herokuapp.com/' + item.snippet.thumbnails.default.url);
+
+      });
+      ant3d.GenerateObjects();
+    });
+  },
+  getWikiData: function (SearchTerm, callback) {
     $.ajax({
       type: "GET",
       url: 'https://en.wikipedia.org/w/api.php?action=opensearch&search="' + SearchTerm + '"&format=json&callback=?',
@@ -107,10 +114,10 @@ var ant3d = {
         ant3d.colArticles.push(jsondata[2][index]);
         ant3d.colLinks.push(jsondata[3][index]);
 
-      })     
-      callback(SearchTerm);  
+      })
+      callback(SearchTerm);
     });
-    
+
   },
   GetGiffys: function (inSrch, callback) {
     let gkey = "aGpceXfwMY5TKtoH39N128oj2HirwBKv";
@@ -133,48 +140,52 @@ var ant3d = {
 
     });
   },
-  RunVideos: function(){
-      if (ant3d.iOS()){
-        //change behavior on iPhone to handle: Apple 'ALL VIDEO FULL SCREEN' decision.
-        return;
-      }
-      let video = document.getElementById('myvideo');
-      let video2 = document.getElementById('myvideo2');
-      let video3 = document.getElementById('myvideo3');
-      
-      video.loop = true;
-      video.play();
+  RunVideos: function () {
+    if (ant3d.iOS()) {
+      //change behavior on iPhone to handle: Apple 'ALL VIDEO FULL SCREEN' decision.
+      return;
+    }
+    let video = document.getElementById('myvideo');
+    let video2 = document.getElementById('myvideo2');
+    let video3 = document.getElementById('myvideo3');
 
-      video2.loop = true;
-      video2.play();
+    video.loop = true;
+    video.play();
 
-      video3.loop = true;
-      video3.play();
+    video2.loop = true;
+    video2.play();
+
+    video3.loop = true;
+    video3.play();
   },
-  Resize: function (){
-  
+  Resize: function () {
+
     ant3d.myheight = window.innerHeight * ant3d.Hcoef;;
-    ant3d.mywidth = ant3d.jRightHereBaby.outerWidth()  * ant3d.Wcoef;//window.innerWidth * ant3d.Wcoef;
+    ant3d.mywidth = ant3d.jRightHereBaby.outerWidth() * ant3d.Wcoef;//window.innerWidth * ant3d.Wcoef;
     ant3d.camera = new THREE.PerspectiveCamera(75, (ant3d.mywidth / ant3d.myheight), 0.1, 1000);
     ant3d.renderer.setSize(ant3d.mywidth, ant3d.myheight);
   },
-  StartUp: function (inJQueryDomElement, inSrch) {
+  StartUp: function (inJQueryDomElement, inSrch, inOutCallback) {
     //Code that sets up your initial sceen here
+    ant3d.CurGiffy = '';
+    ant3d.CurYouTube = '';
+    ant3d.ReadText = '';
 
+    ant3d.callpage = inOutCallback
     ant3d.jRightHereBaby = inJQueryDomElement;
     ant3d.colGiffys.length = 0;
     ant3d.rotspeed = 0;
 
-    
-  
-    
+
+
+
 
     while (ant3d.scene.children.length > 0) { ant3d.scene.remove(ant3d.scene.children[0]); }
     ant3d.renderer.renderLists.dispose();
 
     ant3d.scene = new THREE.Scene();
     ant3d.renderer = new THREE.WebGLRenderer();
-  
+
 
     //ant3d.myheight = ant3d.jRightHereBaby.height() * ant3d.Hcoef;//window.innerHeight * ant3d.Hcoef;;
     //ant3d.mywidth = ant3d.jRightHereBaby.width()  * ant3d.Wcoef;//window.innerWidth * ant3d.Wcoef;
@@ -196,12 +207,12 @@ var ant3d = {
     ant3d.NewTex6 = '';
 
     ant3d.camera.position.z = 0;
-    
-    inJQueryDomElement.append(ant3d.renderer.domElement);    
-    
+
+    inJQueryDomElement.append(ant3d.renderer.domElement);
+
     $(document).off('click');
     $(document).on('click', function (e) {
-      
+
       ant3d.mylastevent = e;
       ant3d.RunVideos();
 
@@ -215,12 +226,12 @@ var ant3d = {
     });
     $(document).off('touchend');
     $(document).on('touchend', function (e) {
-      
+
       ant3d.UpdateMouse(e);
       ant3d.DeltaX = ant3d.mylastevent.originalEvent.touches[0].pageX - e.originalEvent.changedTouches[0].pageX;
-            
+
       ant3d.bFireDetectObjectsUnderMouse = true
-      
+
       ant3d.mylastevent = e;
       ant3d.rotspeed = ant3d.DeltaX * .0001;
       ant3d.RunVideos();
@@ -228,12 +239,12 @@ var ant3d = {
     });
     $(document).off('mousedown');
     $(document).on('mousedown', function (e) {
-      
+
       ant3d.mylastevent = e;
-      ant3d.UpdateMouse(e);      
-      
+      ant3d.UpdateMouse(e);
+
       ant3d.bFireDetectObjectsUnderMouse = true;
-      ant3d.RunVideos();     
+      ant3d.RunVideos();
     });
     $(document).off('mouseup');
     $(document).on('mouseup', function (e) {
@@ -245,21 +256,21 @@ var ant3d = {
       ant3d.RunVideos();
     });
 
-    
+
     ant3d.GetGiffys(inSrch, ant3d.getWikiData);
 
 
   },
-  UpdateMouse: function (e){
+  UpdateMouse: function (e) {
     //console.log(e);
     //ant3d.ant3dMouse.x = ( e.clientX / (ant3d.jRightHereBaby.innerWidth * ant3d.Wcoef) ) * 2 - 1;
     //ant3d.ant3dMouse.y = - ( e.clientY / (ant3d.jRightHereBaby.innerHeight * ant3d.Hcoef) ) * 2 + 1;
-    ant3d.ant3dMouse.x = ( e.clientX / (window.innerWidth * ant3d.Wcoef) ) * 2 - 1;
-    ant3d.ant3dMouse.y = - ( e.clientY / (window.innerHeight * ant3d.Hcoef) ) * 2 + 1;
+    ant3d.ant3dMouse.x = (e.clientX / (window.innerWidth * ant3d.Wcoef)) * 2 - 1;
+    ant3d.ant3dMouse.y = - (e.clientY / (window.innerHeight * ant3d.Hcoef)) * 2 + 1;
   },
   GetTextArray: function (inText, inLineLen) {
     //This function wraps text el-manuel aan.
-    
+
     let col = [];
     let wrkwords = inText.split(' ');
     let wrkline = '';
@@ -305,7 +316,7 @@ var ant3d = {
 
 
     let ypos = 5;
-    if(inTitle){
+
     $.each(ant3d.GetTextArray(inTitle, 30),
       function (i, item) {
 
@@ -318,7 +329,7 @@ var ant3d = {
       function (i, item) {
         xc.fillText(item, 10, ypos);
         ypos += 12;
-      });}
+      });
 
     //add map here
     let xm = '';
@@ -335,7 +346,7 @@ var ant3d = {
         xm.map.needsUpdate = true;
         break;
       case myrnd < .08333 * 2:
- 
+
         cubetype = 'html5Vid';
         cubetypeid = 2;
         xm = new THREE.MeshBasicMaterial({
@@ -374,7 +385,7 @@ var ant3d = {
           map: ant3d.NewTex6
         });
         xm.map.needsUpdate = true;
-        break;    
+        break;
       default:
         cubetype = 'Wiki';
         cubetypeid = 0;
@@ -423,39 +434,39 @@ var ant3d = {
     //Store data refs in cube
     cube.MyType = cubetype;
     cube.MyTypeId = cubetypeid;
-    
-    switch(cubetype){
+
+    switch (cubetype) {
       case 'html5Vid':
-       switch(cubetypeid){
+        switch (cubetypeid) {
           case 1:
-           cube.GifLink = ant3d.NewTex;
-           break;
+            cube.GifLink = ant3d.NewTex;
+            break;
           case 2:
-           cube.GifLink = ant3d.NewTex2;
-           break;
+            cube.GifLink = ant3d.NewTex2;
+            break;
           case 3:
-           cube.GifLink = ant3d.NewTex3;
-           break;
-       };
-       break;      
+            cube.GifLink = ant3d.NewTex3;
+            break;
+        };
+        break;
       case 'YouTube':
-       switch(cubetypeid){
-        case 1:
-         cube.GifLink = ant3d.NewTex4;
-         break;
-        case 2:
-         cube.GifLink = ant3d.NewTex5;
-         break;
-        case 3:
-         cube.GifLink = ant3d.NewTex6;
-         break;
-       };
-       break;
+        switch (cubetypeid) {
+          case 1:
+            cube.YouTubeId = ant3d.colYTVidIds[0];
+            break;
+          case 2:
+            cube.YouTubeId = ant3d.colYTVidIds[1];
+            break;
+          case 3:
+            cube.YouTubeId = ant3d.colYTVidIds[2];
+            break;
+        };
+        break;
       case 'Wiki':
         cube.Title = inTitle;
         cube.Article = inArticle;
-        cube.WikiLink = inLink;       
-      break;
+        cube.WikiLink = inLink;
+        break;
     }
     return cube;
   },
@@ -477,95 +488,95 @@ var ant3d = {
     video.src = ant3d.colGiffys[0];
     video2.src = ant3d.colGiffys[1];
     video3.src = ant3d.colGiffys[2];
-  
+
     video.load();
     //video.addEventListener('loadeddata', function () {
-      video2.load();
+    video2.load();
     //  video2.addEventListener('loadeddata', function () {
-        video3.load();
+    video3.load();
     //    video3.addEventListener('loadeddata', function () {
 
-          video.loop = true;
-          video.play();
-          video2.loop = true;
-          video2.play();
-          video3.loop = true;
-          video3.play();
-      
-          let texture1 = new THREE.VideoTexture(video);
-          texture1.minFilter = THREE.LinearFilter;
-          texture1.magFilter = THREE.LinearFilter;
-          texture1.format = THREE.RGBFormat;
-          texture1.needsUpdate = true;
+    video.loop = true;
+    video.play();
+    video2.loop = true;
+    video2.play();
+    video3.loop = true;
+    video3.play();
 
-          let texture2 = new THREE.VideoTexture(video2);
-          texture2.minFilter = THREE.LinearFilter;
-          texture2.magFilter = THREE.LinearFilter;
-          texture2.format = THREE.RGBFormat;
-          texture2.needsUpdate = true;
+    let texture1 = new THREE.VideoTexture(video);
+    texture1.minFilter = THREE.LinearFilter;
+    texture1.magFilter = THREE.LinearFilter;
+    texture1.format = THREE.RGBFormat;
+    texture1.needsUpdate = true;
 
-          let texture3 = new THREE.VideoTexture(video3);
-          texture3.minFilter = THREE.LinearFilter;
-          texture3.magFilter = THREE.LinearFilter;
-          texture3.format = THREE.RGBFormat;
-          texture3.needsUpdate = true;
+    let texture2 = new THREE.VideoTexture(video2);
+    texture2.minFilter = THREE.LinearFilter;
+    texture2.magFilter = THREE.LinearFilter;
+    texture2.format = THREE.RGBFormat;
+    texture2.needsUpdate = true;
 
-          let texture4 = THREE.ImageUtils.loadTexture(ant3d.colYTVidImgs[0]);
+    let texture3 = new THREE.VideoTexture(video3);
+    texture3.minFilter = THREE.LinearFilter;
+    texture3.magFilter = THREE.LinearFilter;
+    texture3.format = THREE.RGBFormat;
+    texture3.needsUpdate = true;
 
-          let texture5 = THREE.ImageUtils.loadTexture(ant3d.colYTVidImgs[1]);
+    let texture4 = THREE.ImageUtils.loadTexture(ant3d.colYTVidImgs[0]);
 
-          let texture6 = THREE.ImageUtils.loadTexture(ant3d.colYTVidImgs[2]);
-          
+    let texture5 = THREE.ImageUtils.loadTexture(ant3d.colYTVidImgs[1]);
+
+    let texture6 = THREE.ImageUtils.loadTexture(ant3d.colYTVidImgs[2]);
 
 
-          ant3d.NewTex = texture1
-          ant3d.NewTex2 = texture2
-          ant3d.NewTex3 = texture3
 
-          ant3d.NewTex4 = texture4
-          ant3d.NewTex5 = texture5
-          ant3d.NewTex6 = texture6
+    ant3d.NewTex = texture1
+    ant3d.NewTex2 = texture2
+    ant3d.NewTex3 = texture3
 
-          let artid = 0;
-          for (let i = 0; i < 10; i++) {
-            // Video is loaded and can be played
-            if(artid===9){artid=0}; 
-            let myTitle = ant3d.colHeadings[artid];
-            let myArticle = ant3d.colArticles[artid];
-            let myLink = ant3d.colLinks[artid];
-            if(artid<9){artid++};
-            
+    ant3d.NewTex4 = texture4
+    ant3d.NewTex5 = texture5
+    ant3d.NewTex6 = texture6
 
-            cuby = -4;
-            let xz = ant3d.rotate(0, 0, cubx, cubz, ((360 / 10) * i));
-            let cubeA = ant3d.GenerateCube('cubeA' + i, xz[0], cuby, xz[1], myTitle, myArticle, myLink);
-            
-            
-            myTitle = ant3d.colHeadings[artid];
-            myArticle = ant3d.colArticles[artid];
-            myLink = ant3d.colLinks[artid];
-            if(artid<9){artid++};
+    let artid = 0;
+    for (let i = 0; i < 10; i++) {
+      // Video is loaded and can be played
+      if (artid === 9) { artid = 0 };
+      let myTitle = ant3d.colHeadings[artid];
+      let myArticle = ant3d.colArticles[artid];
+      let myLink = ant3d.colLinks[artid];
+      if (artid < 9) { artid++ };
 
-            cuby = 0;
-            xy = ant3d.rotate(0, 0, cuby, cubx, ((360 / 10) * i));
-            let cubeB = ant3d.GenerateCube('cubeB' + i, xz[0], cuby, xz[1], myTitle, myArticle, myLink);
 
-            myTitle = ant3d.colHeadings[artid];
-            myArticle = ant3d.colArticles[artid];
-            myLink = ant3d.colLinks[artid];
-            if(artid<9){artid++};
-            
-            cuby = 4;
-            xy = ant3d.rotate(0, 0, cuby, cubx, ((360 / 10) * i));
-            let cubeC = ant3d.GenerateCube('cubeC' + i, xz[0], cuby, xz[1], myTitle, myArticle, myLink);
+      cuby = -4;
+      let xz = ant3d.rotate(0, 0, cubx, cubz, ((360 / 10) * i));
+      let cubeA = ant3d.GenerateCube('cubeA' + i, xz[0], cuby, xz[1], myTitle, myArticle, myLink);
 
-            ant3d.scene.add(cubeA, cubeB, cubeC);
-          }
-          requestAnimationFrame(ant3d.Animate);
 
-  //      }, false);
-  //    }, false);
-  //  }, false);
+      myTitle = ant3d.colHeadings[artid];
+      myArticle = ant3d.colArticles[artid];
+      myLink = ant3d.colLinks[artid];
+      if (artid < 9) { artid++ };
+
+      cuby = 0;
+      xy = ant3d.rotate(0, 0, cuby, cubx, ((360 / 10) * i));
+      let cubeB = ant3d.GenerateCube('cubeB' + i, xz[0], cuby, xz[1], myTitle, myArticle, myLink);
+
+      myTitle = ant3d.colHeadings[artid];
+      myArticle = ant3d.colArticles[artid];
+      myLink = ant3d.colLinks[artid];
+      if (artid < 9) { artid++ };
+
+      cuby = 4;
+      xy = ant3d.rotate(0, 0, cuby, cubx, ((360 / 10) * i));
+      let cubeC = ant3d.GenerateCube('cubeC' + i, xz[0], cuby, xz[1], myTitle, myArticle, myLink);
+
+      ant3d.scene.add(cubeA, cubeB, cubeC);
+    }
+    requestAnimationFrame(ant3d.Animate);
+
+    //      }, false);
+    //    }, false);
+    //  }, false);
     return;
   },
   clearThreeObj: function (obj) {
@@ -582,12 +593,16 @@ var ant3d = {
   Animate: function () {
     //Code that runs every frame goes here
     let graObj = ant3d.antDetectObjectsUnderMouse();
-   
-     if(graObj[0]){
-      console.log('GRAB OBJ');
-      console.log(graObj[0]);
-      
-    };      
+
+    if (graObj[0]) {
+      ant3d.CurGiffy = graObj[0].GifLink;
+      ant3d.CurYouTube = graObj[0].YouTubeId;
+      ant3d.ReadText = cube.Title + ' ' + cube.Article;
+      setTimeout(function () {
+        ant3d.inOutCallback(ant3d.CurGiffy, ant3d.CurYouTube, ant3d.ReadText);
+      }, 1);
+    };
+
     ant3d.scene.rotation.y += ant3d.rotspeed;
     $.each(ant3d.scene.children, function (i, item) {
       item.rotation.y += -ant3d.rotspeed;
@@ -605,7 +620,7 @@ var ant3d = {
       ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
     return [nx, ny];
   },
-  iOS: function() {
+  iOS: function () {
     var iDevices = [
       'iPad Simulator',
       'iPhone Simulator',
@@ -613,29 +628,29 @@ var ant3d = {
       'iPad',
       'iPhone',
       'iPod'
-    ];  
+    ];
     if (!!navigator.platform) {
       while (iDevices.length) {
-        if (navigator.platform === iDevices.pop()){ return true; }
+        if (navigator.platform === iDevices.pop()) { return true; }
       }
-    }  
+    }
     return false;
   }
 }
 $(document).ready(function () {
-  ant3d.StartUp($("#rightherebaby"), 'Programming');
-  $(window).on('resize',function(){ant3d.Resize();});
-  $('#search').on('click', function () { 
+  ant3d.StartUp($("#rightherebaby"), 'Programming', tryme);
+  $(window).on('resize', function () { ant3d.Resize(); });
+  $('#search').on('click', function () {
     //calling ant3d.Startup example...
     //ant3d.StartUp(jQueryDomElement, SearchText);   
-    ant3d.StartUp($("#rightherebaby"), $('#input').val());
+    ant3d.StartUp($("#rightherebaby"), $('#input').val(), tryme);
     $('#input').val('');
   });
-  $('#input').on('keyup',function(e){
-      if (e.key === 'Enter' ){
-        ant3d.StartUp($("#rightherebaby"), $('#input').val());
-        $('#input').val('');
-      }
+  $('#input').on('keyup', function (e) {
+    if (e.key === 'Enter') {
+      ant3d.StartUp($("#rightherebaby"), $('#input').val(), tryme);
+      $('#input').val('');
+    }
   });
 });
 var int3d = ant3d;
