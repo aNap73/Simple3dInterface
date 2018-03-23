@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+<title>Search</title>
+ <style>
+  .video{
+       width:560;
+       height:315;
+       frameborder:0;
+
+   }
+ </style>
+ </head>
+ <body>
+   <div id="buttons">
+   <label> <input id="query" type="text"/><button id="search-button" onclick="keyWordsearch()">Search</button></label>  
+
+
+  <div id="video">
+   <span id="results"></span>
+    </div>
+   <div id="container">
+     <h1>Search Results</h1>
+     <!--<ul id="results"></ul>-->
+   </div>          
+
+   <script>
+    function keyWordsearch(){
+       gapi.client.setApiKey("AIzaSyBofD-GuDJbsXUs-eRaFlHrMmX7zF3vl24");
+       gapi.client.load('youtube', 'v3', function() {
+               makeRequest();
+       });
+         }
+
+     function makeRequest() {
+       var q = $('#query').val();
+       var request = gapi.client.youtube.search.list({
+               q: q,
+               part: 'snippet',
+               maxResults: 10
+       });
+       request.execute(function(response)  {  
+               //console.log(response);
+               $('#results').empty()
+               var srchItems = response.result.items;                      
+               $.each(srchItems, function(index, item) {
+               vidTitle = item.snippet.title;
+               //var video=item.id.videoId
+               console.log(video);
+               $('#results').append('<pre>' + vidTitle +'</pre>');
+               var video=$("<iframe>").attr("src","https://www.youtube.com/embed/"+item.id.videoId).addClass("video");
+               $("#video").append(video);  
+       })  
+   })  
+}
+   </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script src="https://apis.google.com/js/client.js?onload=googleApiClientReady">  </script>
+   </body>
+</html>
