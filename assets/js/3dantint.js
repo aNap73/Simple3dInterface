@@ -1,14 +1,13 @@
 //A.Napolitano  03/22/2018
-//3
+//1
 //ant3d is a simple api extraction and 3d interface written in THREE.js
 //It currently displays data from the API's: Wikipedia, Giffy
 
 //The script is interfaced by calling the ant3d.Startup method
 //with the parameters SearchText, $(DomElement). See bottom of code for example.
-function tryme(giff, youtube, text) {
-  window.alert(giff);
-  window.alert(youtube);
-  window.alert(text);
+function tryme(giff, youtube, mtext) {
+  $('#output').text = giff + ' ' + youtube + ' ' + mtext;
+
 }
 var ant3d = {
   bFirstTime: true,
