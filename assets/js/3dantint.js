@@ -5,10 +5,7 @@
 
 //The script is interfaced by calling the ant3d.Startup method
 //with the parameters SearchText, $(DomElement). See bottom of code for example.
-function tryme(giff, youtube, mtext) {
-  $('#output').text(giff + ' ' + youtube + ' ' + mtext);
 
-}
 var ant3d = {
   bFirstTime: true,
   bDblClick: false,
@@ -210,53 +207,53 @@ var ant3d = {
     ant3d.camera.position.z = 0;
 
     inJQueryDomElement.append(ant3d.renderer.domElement);
-    if(ant3d.bFirstTime){
+    if (ant3d.bFirstTime) {
       ant3d.bFirstTime = false;
-   //   $(document).off('dblclick');
+      //   $(document).off('dblclick');
       $(document).on('dblclick',
-        function(e){
+        function (e) {
           ant3d.bDblClick = true;
-      //    e.preventDefault();
+          //    e.preventDefault();
         });
-      
-  
-   //   $(document).off('click');
+
+
+      //   $(document).off('click');
       $(document).on('click', function (e) {
-  
+
         ant3d.mylastevent = e;
         ant3d.RunVideos();
-  
+
       });
       //inJQueryDomElement = $('.mycanvas');
-   //   $(document).off('touchstart');
+      //   $(document).off('touchstart');
       $(document).on('touchstart', function (e) {
         ant3d.mylastevent = e;
         ant3d.UpdateMouse(e);
         ant3d.RunVideos();
       });
-  //    $(document).off('touchend');
+      //    $(document).off('touchend');
       $(document).on('touchend', function (e) {
-  
+
         ant3d.UpdateMouse(e);
         ant3d.DeltaX = ant3d.mylastevent.originalEvent.touches[0].pageX - e.originalEvent.changedTouches[0].pageX;
-  
+
         ant3d.bFireDetectObjectsUnderMouse = true
-  
+
         ant3d.mylastevent = e;
         ant3d.rotspeed = ant3d.DeltaX * .0001;
         ant3d.RunVideos();
-  
+
       });
-  //    $(document).off('mousedown');
+      //    $(document).off('mousedown');
       $(document).on('mousedown', function (e) {
-  
+
         ant3d.mylastevent = e;
         ant3d.UpdateMouse(e);
-  
+
         ant3d.bFireDetectObjectsUnderMouse = true;
         ant3d.RunVideos();
       });
-  //    $(document).off('mouseup');
+      //    $(document).off('mouseup');
       $(document).on('mouseup', function (e) {
         ant3d.UpdateMouse(e);
         ant3d.DeltaX = ant3d.mylastevent.clientX - e.clientX;
@@ -266,7 +263,7 @@ var ant3d = {
         ant3d.RunVideos();
       });
     }
-    
+
 
 
     ant3d.GetGiffys(inSrch, ant3d.getWikiData);
@@ -275,10 +272,18 @@ var ant3d = {
   },
   UpdateMouse: function (e) {
     //console.log(e);
-    //ant3d.ant3dMouse.x = ( e.clientX / (ant3d.jRightHereBaby.innerWidth * ant3d.Wcoef) ) * 2 - 1;
-    //ant3d.ant3dMouse.y = - ( e.clientY / (ant3d.jRightHereBaby.innerHeight * ant3d.Hcoef) ) * 2 + 1;
-    ant3d.ant3dMouse.x = (e.clientX / (window.innerWidth * ant3d.Wcoef)) * 2 - 1;
-    ant3d.ant3dMouse.y = - (e.clientY / (window.innerHeight * ant3d.Hcoef)) * 2 + 1;
+    if(e.ClientX){
+      ant3d.ant3dMouse.x = ( e.clientX / (ant3d.jRightHereBaby.innerWidth * ant3d.Wcoef) ) * 2 - 1;
+      ant3d.ant3dMouse.y = - ( e.clientY / (ant3d.jRightHereBaby.innerHeight * ant3d.Hcoef) ) * 2 + 1;
+    }
+    if(e.pageX){
+      ant3d.ant3dMouse.x = ( e.pageX / (ant3d.jRightHereBaby.innerWidth * ant3d.Wcoef) ) * 2 - 1;
+      ant3d.ant3dMouse.y = - ( e.pageY / (ant3d.jRightHereBaby.innerHeight * ant3d.Hcoef) ) * 2 + 1;
+    }
+    
+
+    //ant3d.ant3dMouse.x = (e.clientX / (window.innerWidth * ant3d.Wcoef)) * 2 - 1;
+    //ant3d.ant3dMouse.y = - (e.clientY / (window.innerHeight * ant3d.Hcoef)) * 2 + 1;
   },
   GetTextArray: function (inText, inLineLen) {
     //This function wraps text el-manuel aan.
@@ -446,11 +451,11 @@ var ant3d = {
     //Store data refs in cube
     cube.MyType = cubetype;
     cube.MyTypeId = cubetypeid;
-  
+
     cube.MyGiffyLink = ''
     cube.YouTubeId = '';
     cube.Title = '';
-    cube.Article ='';
+    cube.Article = '';
     cube.WikiLink = '';
     switch (cubetype) {
       case 'html5Vid':
@@ -485,7 +490,7 @@ var ant3d = {
         cube.WikiLink = inLink;
         break;
     }
-    
+
     return cube;
   },
   Videos: [],
@@ -612,18 +617,18 @@ var ant3d = {
     //Code that runs every frame goes here
     let graObj = ant3d.antDetectObjectsUnderMouse();
 
-    if (graObj[0]) {      
-      if(ant3d.bDblClick===true){
+    if (graObj[0]) {
+      if (ant3d.bDblClick === true) {
         console.log('graObj');
         console.log(graObj[0].object);
         ant3d.CurGiffy = graObj[0].object.MyGiffyLink;
         ant3d.CurYouTube = graObj[0].object.YouTubeId.videoId;
         ant3d.ReadText = graObj[0].object.Title + ' ' + graObj[0].object.Article;
-        //setTimeout(function () {
-          ant3d.callpage(ant3d.CurGiffy, ant3d.CurYouTube, ant3d.ReadText);          
-        //''}, 1);
-        ant3d.bDblClick=false;
-      }      
+        setTimeout(function () {
+          ant3d.callpage(ant3d.CurGiffy, ant3d.CurYouTube, ant3d.ReadText);
+        }, 1);
+        ant3d.bDblClick = false;
+      }
     };
 
     ant3d.scene.rotation.y += ant3d.rotspeed;
@@ -661,17 +666,17 @@ var ant3d = {
   }
 }
 $(document).ready(function () {
-  ant3d.StartUp($("#rightherebaby"), 'Programming', tryme);
+  ant3d.StartUp($("#rightherebaby"), 'Programming', displayFrom3D);
   $(window).on('resize', function () { ant3d.Resize(); });
   $('#search').on('click', function () {
     //calling ant3d.Startup example...
     //ant3d.StartUp(jQueryDomElement, SearchText);   
-    ant3d.StartUp($("#rightherebaby"), $('#input').val(), tryme);
+    ant3d.StartUp($("#rightherebaby"), $('#input').val(), displayFrom3D);
     $('#input').val('');
   });
   $('#input').on('keyup', function (e) {
     if (e.key === 'Enter') {
-      ant3d.StartUp($("#rightherebaby"), $('#input').val(), tryme);
+      ant3d.StartUp($("#rightherebaby"), $('#input').val(), displayFrom3D);
       $('#input').val('');
     }
   });
