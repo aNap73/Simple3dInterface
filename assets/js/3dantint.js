@@ -1,5 +1,5 @@
 //A.Napolitano  03/22/2018
-//2
+//3
 //ant3d is a simple api extraction and 3d interface written in THREE.js
 //It currently displays data from the API's: Wikipedia, Giffy
 
@@ -214,7 +214,7 @@ var ant3d = {
     $('canvas').on('dblclick',
       function(e){
         ant3d.bDblClick = true;
-        e.preventDefault();
+    //    e.preventDefault();
       });
     
 
