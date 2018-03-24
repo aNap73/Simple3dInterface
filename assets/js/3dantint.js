@@ -1,5 +1,5 @@
 //A.Napolitano  03/22/2018
-//1
+//2
 //ant3d is a simple api extraction and 3d interface written in THREE.js
 
 //It currently displays data from the API's: Wikipedia, Giffy
@@ -17,8 +17,8 @@ var ant3d = {
   callpage: '',
   friction: .995,
   DeltaX: 0,
-  Wcoef: .5,
-  Hcoef: .5,
+  Wcoef: 1,
+  Hcoef: 1,
   jRightHereBaby: '',
   tempcanvas: '',
   colGiffys: [],
@@ -274,18 +274,18 @@ var ant3d = {
   },
   UpdateMouse: function (e) {
     console.log(e);
-    if(e.ClientX){
-      ant3d.ant3dMouse.x = ( e.clientX / ($('#rightherebaby').innerWidth * ant3d.Wcoef) ) * 2 - 1;
-      ant3d.ant3dMouse.y = - ( e.clientY / ($('#rightherebaby').innerHeight * ant3d.Hcoef) ) * 2 + 1;
-    }
-    if(e.pageX){
-      ant3d.ant3dMouse.x = ( e.pageX / ($('#rightherebaby').innerWidth * ant3d.Wcoef) ) * 2 - 1;
-      ant3d.ant3dMouse.y = - ( e.pageY / ($('#rightherebaby').innerHeight * ant3d.Hcoef) ) * 2 + 1;
-    }
+    // if(e.ClientX){
+    //   ant3d.ant3dMouse.x = ( e.clientX / ($('#rightherebaby').innerWidth * ant3d.Wcoef) ) * 2 - 1;
+    //   ant3d.ant3dMouse.y = - ( e.clientY / ($('#rightherebaby').innerHeight * ant3d.Hcoef) ) * 2 + 1;
+    // }
+    // if(e.pageX){
+    //   ant3d.ant3dMouse.x = ( e.pageX / ($('#rightherebaby').innerWidth * ant3d.Wcoef) ) * 2 - 1;
+    //   ant3d.ant3dMouse.y = - ( e.pageY / ($('#rightherebaby').innerHeight * ant3d.Hcoef) ) * 2 + 1;
+    // }
     
 
-    // ant3d.ant3dMouse.x = (e.clientX / (window.innerWidth * ant3d.Wcoef)) * 2 - 1;
-    // ant3d.ant3dMouse.y = - (e.clientY / (window.innerHeight * ant3d.Hcoef)) * 2 + 1;
+    ant3d.ant3dMouse.x = (e.clientX / (window.innerWidth * ant3d.Wcoef)) * 2 - 1;
+    ant3d.ant3dMouse.y = - (e.clientY / (window.innerHeight * ant3d.Hcoef)) * 2 + 1;
   },
   GetTextArray: function (inText, inLineLen) {
     //This function wraps text el-manuel aan.
