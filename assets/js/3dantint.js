@@ -1,5 +1,5 @@
 //A.Napolitano  03/22/2018
-//1
+//3
 //ant3d is a simple api extraction and 3d interface written in THREE.js
 //It currently displays data from the API's: Wikipedia, Giffy
 
@@ -213,7 +213,7 @@ var ant3d = {
     inJQueryDomElement.append(ant3d.renderer.domElement);
     if(ant3d.bFirstTime){
       ant3d.bFirstTime = false;
-      $(document).off('dblclick');
+   //   $(document).off('dblclick');
       $(document).on('dblclick',
         function(e){
           ant3d.bDblClick = true;
@@ -221,7 +221,7 @@ var ant3d = {
         });
       
   
-      $(document).off('click');
+   //   $(document).off('click');
       $(document).on('click', function (e) {
   
         ant3d.mylastevent = e;
@@ -229,13 +229,13 @@ var ant3d = {
   
       });
       //inJQueryDomElement = $('.mycanvas');
-      $(document).off('touchstart');
+   //   $(document).off('touchstart');
       $(document).on('touchstart', function (e) {
         ant3d.mylastevent = e;
         ant3d.UpdateMouse(e);
         ant3d.RunVideos();
       });
-      $(document).off('touchend');
+  //    $(document).off('touchend');
       $(document).on('touchend', function (e) {
   
         ant3d.UpdateMouse(e);
@@ -248,7 +248,7 @@ var ant3d = {
         ant3d.RunVideos();
   
       });
-      $(document).off('mousedown');
+  //    $(document).off('mousedown');
       $(document).on('mousedown', function (e) {
   
         ant3d.mylastevent = e;
@@ -257,7 +257,7 @@ var ant3d = {
         ant3d.bFireDetectObjectsUnderMouse = true;
         ant3d.RunVideos();
       });
-      $(document).off('mouseup');
+  //    $(document).off('mouseup');
       $(document).on('mouseup', function (e) {
         ant3d.UpdateMouse(e);
         ant3d.DeltaX = ant3d.mylastevent.clientX - e.clientX;
