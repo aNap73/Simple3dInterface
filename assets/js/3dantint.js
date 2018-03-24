@@ -1,5 +1,5 @@
 //A.Napolitano  03/22/2018
-//2
+//6
 //ant3d is a simple api extraction and 3d interface written in THREE.js
 //It currently displays data from the API's: Wikipedia, Giffy
 
@@ -11,6 +11,7 @@ function tryme(giff, youtube, text) {
   window.alert(text);
 }
 var ant3d = {
+  bFirstTime: true,
   bDblClick: false,
   CurGiffy: '',
   CurYouTube: '',
@@ -210,59 +211,62 @@ var ant3d = {
     ant3d.camera.position.z = 0;
 
     inJQueryDomElement.append(ant3d.renderer.domElement);
-    $(document).off('dblclick');
-    $(document).on('dblclick',
-      function(e){
-        ant3d.bDblClick = true;
-    //    e.preventDefault();
+    if(this.bFirstTime){
+      $(document).off('dblclick');
+      $(document).on('dblclick',
+        function(e){
+          ant3d.bDblClick = true;
+      //    e.preventDefault();
+        });
+      
+  
+      $(document).off('click');
+      $(document).on('click', function (e) {
+  
+        ant3d.mylastevent = e;
+        ant3d.RunVideos();
+  
       });
+      //inJQueryDomElement = $('.mycanvas');
+      $(document).off('touchstart');
+      $(document).on('touchstart', function (e) {
+        ant3d.mylastevent = e;
+        ant3d.UpdateMouse(e);
+        ant3d.RunVideos();
+      });
+      $(document).off('touchend');
+      $(document).on('touchend', function (e) {
+  
+        ant3d.UpdateMouse(e);
+        ant3d.DeltaX = ant3d.mylastevent.originalEvent.touches[0].pageX - e.originalEvent.changedTouches[0].pageX;
+  
+        ant3d.bFireDetectObjectsUnderMouse = true
+  
+        ant3d.mylastevent = e;
+        ant3d.rotspeed = ant3d.DeltaX * .0001;
+        ant3d.RunVideos();
+  
+      });
+      $(document).off('mousedown');
+      $(document).on('mousedown', function (e) {
+  
+        ant3d.mylastevent = e;
+        ant3d.UpdateMouse(e);
+  
+        ant3d.bFireDetectObjectsUnderMouse = true;
+        ant3d.RunVideos();
+      });
+      $(document).off('mouseup');
+      $(document).on('mouseup', function (e) {
+        ant3d.UpdateMouse(e);
+        ant3d.DeltaX = ant3d.mylastevent.clientX - e.clientX;
+        //console.log(ant3d.DeltaX);
+        ant3d.rotspeed = ant3d.DeltaX * .0001;
+        ant3d.mylastevent = e;
+        ant3d.RunVideos();
+      });
+    }
     
-
-    $(document).off('click');
-    $(document).on('click', function (e) {
-
-      ant3d.mylastevent = e;
-      ant3d.RunVideos();
-
-    });
-    //inJQueryDomElement = $('.mycanvas');
-    $(document).off('touchstart');
-    $(document).on('touchstart', function (e) {
-      ant3d.mylastevent = e;
-      ant3d.UpdateMouse(e);
-      ant3d.RunVideos();
-    });
-    $(document).off('touchend');
-    $(document).on('touchend', function (e) {
-
-      ant3d.UpdateMouse(e);
-      ant3d.DeltaX = ant3d.mylastevent.originalEvent.touches[0].pageX - e.originalEvent.changedTouches[0].pageX;
-
-      ant3d.bFireDetectObjectsUnderMouse = true
-
-      ant3d.mylastevent = e;
-      ant3d.rotspeed = ant3d.DeltaX * .0001;
-      ant3d.RunVideos();
-
-    });
-    $(document).off('mousedown');
-    $(document).on('mousedown', function (e) {
-
-      ant3d.mylastevent = e;
-      ant3d.UpdateMouse(e);
-
-      ant3d.bFireDetectObjectsUnderMouse = true;
-      ant3d.RunVideos();
-    });
-    $(document).off('mouseup');
-    $(document).on('mouseup', function (e) {
-      ant3d.UpdateMouse(e);
-      ant3d.DeltaX = ant3d.mylastevent.clientX - e.clientX;
-      //console.log(ant3d.DeltaX);
-      ant3d.rotspeed = ant3d.DeltaX * .0001;
-      ant3d.mylastevent = e;
-      ant3d.RunVideos();
-    });
 
 
     ant3d.GetGiffys(inSrch, ant3d.getWikiData);
